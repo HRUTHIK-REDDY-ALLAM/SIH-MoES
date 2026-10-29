@@ -1,6 +1,6 @@
 # Varsha
 
-Monsoon forecasting and crop advisory prototype, built for Smart India Hackathon 2024 (Ministry of Earth Sciences problem statement).
+Monsoon forecasting and crop advisory prototype, built for Smart India Hackathon 2026 (Ministry of Earth Sciences problem statement).
 
 The idea: farmers often sow after the first few rains and then lose the crop when a long dry spell follows (a "false onset"). Regional forecasts are too coarse to help at village level, so we try to give block/panchayat level probabilities and turn them into simple sow / wait advice.
 
@@ -84,7 +84,7 @@ CHIRPS, NOAA ONI, IOD DMI, MJO RMM and CFSv2 are open. IMD gridded data, ERA5 (n
 
 ## Team
 
-Team Varsha, SIH 2024.
+Team Varsha, SIH 2026.
 
 ## License
 
