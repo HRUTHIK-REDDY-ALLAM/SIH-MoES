@@ -1,0 +1,73 @@
+# =============================================================================
+# Varsha — Telugu Glossary for Crop and Weather Terms
+# Used by the translation adapter to ensure consistent terminology
+# =============================================================================
+
+weather:
+  monsoon: "రుతుపవనాలు"
+  rainfall: "వర్షపాతం"
+  rain: "వర్షం"
+  dry_spell: "పొడి వాతావరణం"
+  heavy_rain: "భారీ వర్షం"
+  very_heavy_rain: "అత్యంత భారీ వర్షం"
+  onset: "ప్రారంభం"
+  false_onset: "తప్పుడు ప్రారంభం"
+  monsoon_break: "రుతుపవన విరామం"
+  active_monsoon: "సక్రియ రుతుపవనాలు"
+  forecast: "వాతావరణ సూచన"
+  probability: "సంభావ్యత"
+  confidence: "నమ్మకం"
+  temperature: "ఉష్ణోగ్రత"
+  humidity: "తేమ"
+  wind: "గాలి"
+  cloud: "మేఘం"
+  flood: "వరద"
+  drought: "కరువు"
+
+crops:
+  cotton: "పత్తి"
+  soybean: "సోయాబీన్"
+  groundnut: "వేరుశెనగ"
+  paddy: "వరి"
+  rice: "బియ్యం"
+  maize: "మొక్కజొన్న"
+  pigeon_pea: "కంది"
+  green_gram: "పెసర"
+  black_gram: "మినుము"
+  sunflower: "పొద్దుతిరుగుడు"
+  castor: "ఆముదం"
+  sorghum: "జొన్న"
+  finger_millet: "రాగి"
+  sesame: "నువ్వులు"
+
+farming:
+  sowing: "విత్తడం"
+  harvesting: "కోత"
+  seedling: "మొలక"
+  fertiliser: "ఎరువు"
+  pesticide: "పురుగు మందు"
+  irrigation: "నీటిపారుదల"
+  soil_moisture: "నేల తేమ"
+  mulching: "మల్చింగ్"
+  land_preparation: "భూమి సిద్ధం"
+  crop_stage: "పంట దశ"
+  yield: "దిగుబడి"
+  crop_damage: "పంట నష్టం"
+  waterlogging: "నీటి నిల్వ"
+  drainage: "నీటి పారుదల"
+
+actions:
+  sow: "విత్తండి"
+  wait: "ఆగండి"
+  switch: "మార్చండి"
+  protect: "రక్షించండి"
+  alert: "హెచ్చరిక"
+  prepare: "సిద్ధం చేయండి"
+  conserve: "సంరక్షించండి"
+
+time:
+  today: "ఈరోజు"
+  tomorrow: "రేపు"
+  this_week: "ఈ వారం"
+  next_week: "వచ్చే వారం"
+  days: "రోజులు"

@@ -1,0 +1,50 @@
+# =============================================================================
+# Varsha — Event Threshold Configuration
+# All meteorological and agronomic thresholds in one place.
+# Modify these to tune event detection without changing code.
+# =============================================================================
+
+# --- Rainfall thresholds (mm/day) ---
+rainfall:
+  rainy_day: 2.5            # >= this is a "rainy day" (IMD definition)
+  heavy: 64.5               # Heavy rainfall (IMD)
+  very_heavy: 115.6          # Very heavy rainfall (IMD)
+  extremely_heavy: 204.5     # Extremely heavy rainfall (IMD)
+
+# --- Monsoon onset ---
+onset:
+  search_start_doy: 135      # May 15 = day-of-year 135 (start looking)
+  search_end_doy: 213        # August 1 = day-of-year 213 (give up)
+  min_rain_mm: 20.0          # Minimum accumulated rain
+  consecutive_days: 3        # Over this many consecutive days
+  # Post-onset verification window
+  verification_window_days: 30
+
+# --- False onset ---
+false_onset:
+  dry_spell_threshold_days: 7    # Dry spell of >= N days after onset
+  verification_window_days: 30   # Within this window after onset date
+  min_rain_threshold: 2.5        # Daily rain < this counts as dry
+
+# --- Dry spells ---
+dry_spell:
+  thresholds_days: [7, 10, 14]   # Report dry spells of these lengths
+  min_rain_threshold: 2.5        # Daily rain < this counts as dry
+
+# --- Monsoon season ---
+season:
+  start_month: 6              # June
+  start_day: 1
+  end_month: 9                # September
+  end_day: 30
+  # Extended season for onset search (May-Oct)
+  extended_start_month: 5
+  extended_start_day: 15
+  extended_end_month: 10
+  extended_end_day: 31
+
+# --- Forecast horizons ---
+forecast:
+  horizons_days: [7, 14, 21, 30]   # Week 1, 2, 3, 4
+  ensemble_members: 1000            # Stochastic weather generator members
+  confidence_levels: [0.1, 0.25, 0.5, 0.75, 0.9]

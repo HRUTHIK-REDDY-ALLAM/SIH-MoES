@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Data (large files)
+data/cache/
+data/processed/
+*.nc
+*.grib2
+*.tif
+*.geotiff
+
+# Keep sample data
+!data/sample/
+
+# Environment
+.env
+*.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Frontend build
+frontend/.next/
+frontend/out/
+
+# Logs
+*.log
+logs/
+
+# Coverage
+htmlcov/
+.coverage

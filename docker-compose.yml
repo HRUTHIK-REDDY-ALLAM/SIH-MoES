@@ -1,0 +1,89 @@
+# =============================================================================
+# Varsha — Docker Compose
+# Run the entire stack with: docker compose up
+# =============================================================================
+
+services:
+  # --- PostgreSQL + PostGIS ---
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: varsha-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-varsha}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+      POSTGRES_DB: ${POSTGRES_DB:-varsha}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/01_init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-varsha}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- FastAPI Backend ---
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: varsha-backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-varsha}:${POSTGRES_PASSWORD:-changeme_in_production}@db:5432/${POSTGRES_DB:-varsha}
+      DEBUG: ${DEBUG:-true}
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app/backend
+      - ./config:/app/config
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./impact:/app/impact
+      - ./translation:/app/translation
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # --- Next.js Frontend ---
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../Dockerfile.frontend
+    container_name: varsha-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+    command: npm run dev
+
+  # --- Data Pipeline (run on demand) ---
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile.pipeline
+    container_name: varsha-pipeline
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-varsha}:${POSTGRES_PASSWORD:-changeme_in_production}@db:5432/${POSTGRES_DB:-varsha}
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - pipeline  # Only run with: docker compose --profile pipeline run pipeline
+    command: python -m backend.pipeline.daily_run
+
+volumes:
+  pgdata:

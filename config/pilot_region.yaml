@@ -1,0 +1,97 @@
+# =============================================================================
+# Varsha — Pilot Region Configuration
+# =============================================================================
+
+state:
+  name: "Telangana"
+  code: "TG"
+  lgd_code: 36
+
+districts:
+  - name: "Mahbubnagar"
+    lgd_code: 532
+    # Approx bounding box for data extraction (lon_min, lat_min, lon_max, lat_max)
+    bbox: [77.0, 15.5, 78.5, 17.0]
+    # Major blocks (mandals) in the district
+    blocks:
+      - "Mahbubnagar"
+      - "Jadcherla"
+      - "Kalwakurthy"
+      - "Nagarkurnool"
+      - "Achampet"
+      - "Gadwal"
+      - "Alampur"
+      - "Wanaparthy"
+      - "Kollapur"
+
+  - name: "Nalgonda"
+    lgd_code: 531
+    bbox: [78.5, 16.5, 80.0, 17.5]
+    blocks:
+      - "Nalgonda"
+      - "Miryalaguda"
+      - "Devarakonda"
+      - "Suryapet"
+      - "Kodad"
+      - "Huzurnagar"
+      - "Nakrekal"
+      - "Haliya"
+
+  - name: "Medak"
+    lgd_code: 528
+    bbox: [77.5, 17.5, 79.0, 18.5]
+    blocks:
+      - "Medak"
+      - "Siddipet"
+      - "Narsapur"
+      - "Toopran"
+      - "Ramayampet"
+      - "Dubbak"
+      - "Narayankhed"
+      - "Sangareddy"
+
+# Combined bounding box for all districts (for bulk data download)
+pilot_bbox: [77.0, 15.5, 80.0, 18.5]
+
+# CRS for all spatial data
+crs: "EPSG:4326"
+
+# Grid resolution for downscaled output
+output_resolution_deg: 0.05    # ~5 km
+
+# --- Hindcast period ---
+hindcast:
+  start_year: 2001
+  end_year: 2023
+  validation: "leave_one_year_out"
+
+# --- Demo replay ---
+replay:
+  year: 2023
+  start_date: "2023-05-15"
+  end_date: "2023-10-15"
+  notable_events:
+    - date: "2023-06-09"
+      type: "onset_signal"
+      description: "First significant rainfall in parts of Telangana"
+    - date: "2023-06-20"
+      type: "possible_false_onset"
+      description: "Early rains followed by dry period in western districts"
+    - date: "2023-08-10"
+      type: "monsoon_break"
+      description: "August 2023 break — 10+ day dry spell across Telangana"
+    - date: "2023-08-25"
+      type: "break_end"
+      description: "Active monsoon resumes with heavy rain"
+
+# --- Languages ---
+languages:
+  - code: "en"
+    name: "English"
+    default: true
+  - code: "te"
+    name: "Telugu"
+    script: "Telugu"
+  - code: "hi"
+    name: "Hindi"
+    script: "Devanagari"

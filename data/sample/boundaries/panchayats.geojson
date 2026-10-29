@@ -1,0 +1,1631 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1,
+        "name": "Mahbubnagar GP-1",
+        "block_name": "Mahbubnagar",
+        "block_id": 1,
+        "centroid_lat": 15.565557671028083,
+        "centroid_lon": 77.12118595852455,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2,
+        "name": "Mahbubnagar GP-2",
+        "block_name": "Mahbubnagar",
+        "block_id": 1,
+        "centroid_lat": 15.607985740489285,
+        "centroid_lon": 77.04604712139916,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3,
+        "name": "Mahbubnagar GP-3",
+        "block_name": "Mahbubnagar",
+        "block_id": 1,
+        "centroid_lat": 15.587472411055936,
+        "centroid_lon": 77.12486592399458,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4,
+        "name": "Mahbubnagar GP-4",
+        "block_name": "Mahbubnagar",
+        "block_id": 1,
+        "centroid_lat": 15.629348135609602,
+        "centroid_lon": 77.16667316057043,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5,
+        "name": "Mahbubnagar GP-5",
+        "block_name": "Mahbubnagar",
+        "block_id": 1,
+        "centroid_lat": 15.582514180347086,
+        "centroid_lon": 77.08669999306639,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 6,
+        "name": "Jadcherla GP-1",
+        "block_name": "Jadcherla",
+        "block_id": 2,
+        "centroid_lat": 15.671911587523285,
+        "centroid_lon": 77.67574902733271,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 7,
+        "name": "Jadcherla GP-2",
+        "block_name": "Jadcherla",
+        "block_id": 2,
+        "centroid_lat": 15.564812097799368,
+        "centroid_lon": 77.69101210389731,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 8,
+        "name": "Jadcherla GP-3",
+        "block_name": "Jadcherla",
+        "block_id": 2,
+        "centroid_lat": 15.673342899258964,
+        "centroid_lon": 77.68452762560145,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 9,
+        "name": "Jadcherla GP-4",
+        "block_name": "Jadcherla",
+        "block_id": 2,
+        "centroid_lat": 15.583335915325437,
+        "centroid_lon": 77.65003922162113,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 10,
+        "name": "Jadcherla GP-5",
+        "block_name": "Jadcherla",
+        "block_id": 2,
+        "centroid_lat": 15.640356048277336,
+        "centroid_lon": 77.70588876456327,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 11,
+        "name": "Kalwakurthy GP-1",
+        "block_name": "Kalwakurthy",
+        "block_id": 3,
+        "centroid_lat": 15.688762314434209,
+        "centroid_lon": 78.45998755622124,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 12,
+        "name": "Kalwakurthy GP-2",
+        "block_name": "Kalwakurthy",
+        "block_id": 3,
+        "centroid_lat": 15.650616989090176,
+        "centroid_lon": 78.47439625483072,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 13,
+        "name": "Kalwakurthy GP-3",
+        "block_name": "Kalwakurthy",
+        "block_id": 3,
+        "centroid_lat": 15.60452665359827,
+        "centroid_lon": 78.47407434406426,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 14,
+        "name": "Kalwakurthy GP-4",
+        "block_name": "Kalwakurthy",
+        "block_id": 3,
+        "centroid_lat": 15.589375344322395,
+        "centroid_lon": 78.4163695877526,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 15,
+        "name": "Kalwakurthy GP-5",
+        "block_name": "Kalwakurthy",
+        "block_id": 3,
+        "centroid_lat": 15.65380940719848,
+        "centroid_lon": 78.40547765027523,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 16,
+        "name": "Nagarkurnool GP-1",
+        "block_name": "Nagarkurnool",
+        "block_id": 4,
+        "centroid_lat": 16.25896810779681,
+        "centroid_lon": 77.00001411876228,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 17,
+        "name": "Nagarkurnool GP-2",
+        "block_name": "Nagarkurnool",
+        "block_id": 4,
+        "centroid_lat": 16.268565535792135,
+        "centroid_lon": 77.05421537050381,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 18,
+        "name": "Nagarkurnool GP-3",
+        "block_name": "Nagarkurnool",
+        "block_id": 4,
+        "centroid_lat": 16.23953771584368,
+        "centroid_lon": 77.0534101748184,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 19,
+        "name": "Nagarkurnool GP-4",
+        "block_name": "Nagarkurnool",
+        "block_id": 4,
+        "centroid_lat": 16.332518186266828,
+        "centroid_lon": 77.05349353748511,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 20,
+        "name": "Nagarkurnool GP-5",
+        "block_name": "Nagarkurnool",
+        "block_id": 4,
+        "centroid_lat": 16.26986978830958,
+        "centroid_lon": 77.13634293128369,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 21,
+        "name": "Achampet GP-1",
+        "block_name": "Achampet",
+        "block_id": 5,
+        "centroid_lat": 16.23105861613138,
+        "centroid_lon": 77.78900392202681,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 22,
+        "name": "Achampet GP-2",
+        "block_name": "Achampet",
+        "block_id": 5,
+        "centroid_lat": 16.278931866831275,
+        "centroid_lon": 77.73993712683132,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 23,
+        "name": "Achampet GP-3",
+        "block_name": "Achampet",
+        "block_id": 5,
+        "centroid_lat": 16.252632531382137,
+        "centroid_lon": 77.82778091500141,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 24,
+        "name": "Achampet GP-4",
+        "block_name": "Achampet",
+        "block_id": 5,
+        "centroid_lat": 16.37024923861641,
+        "centroid_lon": 77.76645693202211,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 25,
+        "name": "Achampet GP-5",
+        "block_name": "Achampet",
+        "block_id": 5,
+        "centroid_lat": 16.31062279704077,
+        "centroid_lon": 77.77228906882164,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 26,
+        "name": "Gadwal GP-1",
+        "block_name": "Gadwal",
+        "block_id": 6,
+        "centroid_lat": 16.33371411935197,
+        "centroid_lon": 78.2990917522159,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 27,
+        "name": "Gadwal GP-2",
+        "block_name": "Gadwal",
+        "block_id": 6,
+        "centroid_lat": 16.28871047230551,
+        "centroid_lon": 78.37628078620321,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 28,
+        "name": "Gadwal GP-3",
+        "block_name": "Gadwal",
+        "block_id": 6,
+        "centroid_lat": 16.250158917515225,
+        "centroid_lon": 78.33463337906134,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 29,
+        "name": "Gadwal GP-4",
+        "block_name": "Gadwal",
+        "block_id": 6,
+        "centroid_lat": 16.310507713797723,
+        "centroid_lon": 78.3465147194214,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 30,
+        "name": "Gadwal GP-5",
+        "block_name": "Gadwal",
+        "block_id": 6,
+        "centroid_lat": 16.283167165267358,
+        "centroid_lon": 78.41986426034468,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 31,
+        "name": "Alampur GP-1",
+        "block_name": "Alampur",
+        "block_id": 7,
+        "centroid_lat": 16.922786773163455,
+        "centroid_lon": 77.08575895907397,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 32,
+        "name": "Alampur GP-2",
+        "block_name": "Alampur",
+        "block_id": 7,
+        "centroid_lat": 16.936987172911554,
+        "centroid_lon": 77.07865331413531,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 33,
+        "name": "Alampur GP-3",
+        "block_name": "Alampur",
+        "block_id": 7,
+        "centroid_lat": 16.84234812288669,
+        "centroid_lon": 77.11344354381924,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 34,
+        "name": "Alampur GP-4",
+        "block_name": "Alampur",
+        "block_id": 7,
+        "centroid_lat": 16.8680235446794,
+        "centroid_lon": 77.10085800843095,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 35,
+        "name": "Alampur GP-5",
+        "block_name": "Alampur",
+        "block_id": 7,
+        "centroid_lat": 16.920630037952137,
+        "centroid_lon": 77.0097444274926,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 36,
+        "name": "Wanaparthy GP-1",
+        "block_name": "Wanaparthy",
+        "block_id": 8,
+        "centroid_lat": 16.993771192709026,
+        "centroid_lon": 77.65451838849104,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 37,
+        "name": "Wanaparthy GP-2",
+        "block_name": "Wanaparthy",
+        "block_id": 8,
+        "centroid_lat": 16.967865517815397,
+        "centroid_lon": 77.73956422136126,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 38,
+        "name": "Wanaparthy GP-3",
+        "block_name": "Wanaparthy",
+        "block_id": 8,
+        "centroid_lat": 16.94722800121621,
+        "centroid_lon": 77.64178505890428,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 39,
+        "name": "Wanaparthy GP-4",
+        "block_name": "Wanaparthy",
+        "block_id": 8,
+        "centroid_lat": 16.87755244356816,
+        "centroid_lon": 77.72829001661616,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 40,
+        "name": "Wanaparthy GP-5",
+        "block_name": "Wanaparthy",
+        "block_id": 8,
+        "centroid_lat": 16.96340362510835,
+        "centroid_lon": 77.66369566825303,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 41,
+        "name": "Kollapur GP-1",
+        "block_name": "Kollapur",
+        "block_id": 9,
+        "centroid_lat": 16.968863553232747,
+        "centroid_lon": 78.36967478032186,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 42,
+        "name": "Kollapur GP-2",
+        "block_name": "Kollapur",
+        "block_id": 9,
+        "centroid_lat": 16.92038039780736,
+        "centroid_lon": 78.4073734720556,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 43,
+        "name": "Kollapur GP-3",
+        "block_name": "Kollapur",
+        "block_id": 9,
+        "centroid_lat": 16.99281550545369,
+        "centroid_lon": 78.466693350439,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 44,
+        "name": "Kollapur GP-4",
+        "block_name": "Kollapur",
+        "block_id": 9,
+        "centroid_lat": 16.8651229401555,
+        "centroid_lon": 78.37585576277007,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 45,
+        "name": "Kollapur GP-5",
+        "block_name": "Kollapur",
+        "block_id": 9,
+        "centroid_lat": 16.921858015054532,
+        "centroid_lon": 78.36743504384653,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 46,
+        "name": "Nalgonda GP-1",
+        "block_name": "Nalgonda",
+        "block_id": 10,
+        "centroid_lat": 16.67613849042639,
+        "centroid_lon": 78.65363465363194,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 47,
+        "name": "Nalgonda GP-2",
+        "block_name": "Nalgonda",
+        "block_id": 10,
+        "centroid_lat": 16.638888783506616,
+        "centroid_lon": 78.59778761927451,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 48,
+        "name": "Nalgonda GP-3",
+        "block_name": "Nalgonda",
+        "block_id": 10,
+        "centroid_lat": 16.627553421092976,
+        "centroid_lon": 78.63574954740967,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 49,
+        "name": "Nalgonda GP-4",
+        "block_name": "Nalgonda",
+        "block_id": 10,
+        "centroid_lat": 16.580701340137132,
+        "centroid_lon": 78.56502163313542,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 50,
+        "name": "Nalgonda GP-5",
+        "block_name": "Nalgonda",
+        "block_id": 10,
+        "centroid_lat": 16.571834095548677,
+        "centroid_lon": 78.5793781843955,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 51,
+        "name": "Miryalaguda GP-1",
+        "block_name": "Miryalaguda",
+        "block_id": 11,
+        "centroid_lat": 16.578165070984237,
+        "centroid_lon": 79.28742292332517,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 52,
+        "name": "Miryalaguda GP-2",
+        "block_name": "Miryalaguda",
+        "block_id": 11,
+        "centroid_lat": 16.49244833506424,
+        "centroid_lon": 79.22226777626241,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 53,
+        "name": "Miryalaguda GP-3",
+        "block_name": "Miryalaguda",
+        "block_id": 11,
+        "centroid_lat": 16.577355436824586,
+        "centroid_lon": 79.25683931568825,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 54,
+        "name": "Miryalaguda GP-4",
+        "block_name": "Miryalaguda",
+        "block_id": 11,
+        "centroid_lat": 16.56002631812546,
+        "centroid_lon": 79.34076341469664,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 55,
+        "name": "Miryalaguda GP-5",
+        "block_name": "Miryalaguda",
+        "block_id": 11,
+        "centroid_lat": 16.533079192762106,
+        "centroid_lon": 79.34203481665725,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 56,
+        "name": "Devarakonda GP-1",
+        "block_name": "Devarakonda",
+        "block_id": 12,
+        "centroid_lat": 16.59900643077199,
+        "centroid_lon": 79.9204193129329,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 57,
+        "name": "Devarakonda GP-2",
+        "block_name": "Devarakonda",
+        "block_id": 12,
+        "centroid_lat": 16.67498210419762,
+        "centroid_lon": 79.89710634206679,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 58,
+        "name": "Devarakonda GP-3",
+        "block_name": "Devarakonda",
+        "block_id": 12,
+        "centroid_lat": 16.630703294724373,
+        "centroid_lon": 79.92392058474026,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 59,
+        "name": "Devarakonda GP-4",
+        "block_name": "Devarakonda",
+        "block_id": 12,
+        "centroid_lat": 16.625769372180894,
+        "centroid_lon": 79.96230148429139,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 60,
+        "name": "Devarakonda GP-5",
+        "block_name": "Devarakonda",
+        "block_id": 12,
+        "centroid_lat": 16.70045934976257,
+        "centroid_lon": 79.87016333972586,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 61,
+        "name": "Suryapet GP-1",
+        "block_name": "Suryapet",
+        "block_id": 13,
+        "centroid_lat": 16.96847624646346,
+        "centroid_lon": 78.66254284182291,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 62,
+        "name": "Suryapet GP-2",
+        "block_name": "Suryapet",
+        "block_id": 13,
+        "centroid_lat": 17.018456133163646,
+        "centroid_lon": 78.56448649576384,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 63,
+        "name": "Suryapet GP-3",
+        "block_name": "Suryapet",
+        "block_id": 13,
+        "centroid_lat": 17.092635450257923,
+        "centroid_lon": 78.66199400934276,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 64,
+        "name": "Suryapet GP-4",
+        "block_name": "Suryapet",
+        "block_id": 13,
+        "centroid_lat": 17.025551955540013,
+        "centroid_lon": 78.55889491998171,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 65,
+        "name": "Suryapet GP-5",
+        "block_name": "Suryapet",
+        "block_id": 13,
+        "centroid_lat": 16.998353717304493,
+        "centroid_lon": 78.64680317917902,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 66,
+        "name": "Kodad GP-1",
+        "block_name": "Kodad",
+        "block_id": 14,
+        "centroid_lat": 16.922066260226742,
+        "centroid_lon": 79.33146069680244,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 67,
+        "name": "Kodad GP-2",
+        "block_name": "Kodad",
+        "block_id": 14,
+        "centroid_lat": 17.03483353124659,
+        "centroid_lon": 79.31060078192068,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 68,
+        "name": "Kodad GP-3",
+        "block_name": "Kodad",
+        "block_id": 14,
+        "centroid_lat": 16.90899374437855,
+        "centroid_lon": 79.37185246853988,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 69,
+        "name": "Kodad GP-4",
+        "block_name": "Kodad",
+        "block_id": 14,
+        "centroid_lat": 16.929022075445495,
+        "centroid_lon": 79.28302457501947,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 70,
+        "name": "Kodad GP-5",
+        "block_name": "Kodad",
+        "block_id": 14,
+        "centroid_lat": 16.983937389538685,
+        "centroid_lon": 79.28659084955031,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 71,
+        "name": "Huzurnagar GP-1",
+        "block_name": "Huzurnagar",
+        "block_id": 15,
+        "centroid_lat": 16.92499393398441,
+        "centroid_lon": 79.86541738216194,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 72,
+        "name": "Huzurnagar GP-2",
+        "block_name": "Huzurnagar",
+        "block_id": 15,
+        "centroid_lat": 16.96853680693633,
+        "centroid_lon": 79.99889858692711,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 73,
+        "name": "Huzurnagar GP-3",
+        "block_name": "Huzurnagar",
+        "block_id": 15,
+        "centroid_lat": 16.998060368435198,
+        "centroid_lon": 79.92367102810654,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 74,
+        "name": "Huzurnagar GP-4",
+        "block_name": "Huzurnagar",
+        "block_id": 15,
+        "centroid_lat": 16.885268855162582,
+        "centroid_lon": 79.96918305279749,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 75,
+        "name": "Huzurnagar GP-5",
+        "block_name": "Huzurnagar",
+        "block_id": 15,
+        "centroid_lat": 17.011775145556314,
+        "centroid_lon": 79.9638766917736,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 76,
+        "name": "Nakrekal GP-1",
+        "block_name": "Nakrekal",
+        "block_id": 16,
+        "centroid_lat": 17.49059394837383,
+        "centroid_lon": 78.59481848555032,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 77,
+        "name": "Nakrekal GP-2",
+        "block_name": "Nakrekal",
+        "block_id": 16,
+        "centroid_lat": 17.414669438826568,
+        "centroid_lon": 78.61411428275386,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 78,
+        "name": "Nakrekal GP-3",
+        "block_name": "Nakrekal",
+        "block_id": 16,
+        "centroid_lat": 17.383457025751074,
+        "centroid_lon": 78.67471025853315,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 79,
+        "name": "Nakrekal GP-4",
+        "block_name": "Nakrekal",
+        "block_id": 16,
+        "centroid_lat": 17.507691365122035,
+        "centroid_lon": 78.67464801588572,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 80,
+        "name": "Nakrekal GP-5",
+        "block_name": "Nakrekal",
+        "block_id": 16,
+        "centroid_lat": 17.436086738560302,
+        "centroid_lon": 78.67967822699487,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 81,
+        "name": "Haliya GP-1",
+        "block_name": "Haliya",
+        "block_id": 17,
+        "centroid_lat": 17.47995804451384,
+        "centroid_lon": 79.28077311556218,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 82,
+        "name": "Haliya GP-2",
+        "block_name": "Haliya",
+        "block_id": 17,
+        "centroid_lat": 17.37112733538624,
+        "centroid_lon": 79.30116153425797,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 83,
+        "name": "Haliya GP-3",
+        "block_name": "Haliya",
+        "block_id": 17,
+        "centroid_lat": 17.487917661738496,
+        "centroid_lon": 79.30388618811965,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 84,
+        "name": "Haliya GP-4",
+        "block_name": "Haliya",
+        "block_id": 17,
+        "centroid_lat": 17.505954922007614,
+        "centroid_lon": 79.26458943541344,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 85,
+        "name": "Haliya GP-5",
+        "block_name": "Haliya",
+        "block_id": 17,
+        "centroid_lat": 17.449392881299545,
+        "centroid_lon": 79.33077353411673,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 86,
+        "name": "Medak GP-1",
+        "block_name": "Medak",
+        "block_id": 18,
+        "centroid_lat": 17.561067066426848,
+        "centroid_lon": 77.65564329878084,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 87,
+        "name": "Medak GP-2",
+        "block_name": "Medak",
+        "block_id": 18,
+        "centroid_lat": 17.679843890820823,
+        "centroid_lon": 77.67288251268288,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 88,
+        "name": "Medak GP-3",
+        "block_name": "Medak",
+        "block_id": 18,
+        "centroid_lat": 17.568984224310235,
+        "centroid_lon": 77.68095972611161,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 89,
+        "name": "Medak GP-4",
+        "block_name": "Medak",
+        "block_id": 18,
+        "centroid_lat": 17.57054972435379,
+        "centroid_lon": 77.54846507450901,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 90,
+        "name": "Medak GP-5",
+        "block_name": "Medak",
+        "block_id": 18,
+        "centroid_lat": 17.616292330481695,
+        "centroid_lon": 77.59928085419043,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 91,
+        "name": "Siddipet GP-1",
+        "block_name": "Siddipet",
+        "block_id": 19,
+        "centroid_lat": 17.557615735024623,
+        "centroid_lon": 78.28474831966241,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 92,
+        "name": "Siddipet GP-2",
+        "block_name": "Siddipet",
+        "block_id": 19,
+        "centroid_lat": 17.667919862808866,
+        "centroid_lon": 78.22701729928649,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 93,
+        "name": "Siddipet GP-3",
+        "block_name": "Siddipet",
+        "block_id": 19,
+        "centroid_lat": 17.6673268806008,
+        "centroid_lon": 78.26967139091455,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 94,
+        "name": "Siddipet GP-4",
+        "block_name": "Siddipet",
+        "block_id": 19,
+        "centroid_lat": 17.62631160324061,
+        "centroid_lon": 78.1959815996326,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 95,
+        "name": "Siddipet GP-5",
+        "block_name": "Siddipet",
+        "block_id": 19,
+        "centroid_lat": 17.63120484054676,
+        "centroid_lon": 78.34390252275774,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 96,
+        "name": "Narsapur GP-1",
+        "block_name": "Narsapur",
+        "block_id": 20,
+        "centroid_lat": 17.60952949729324,
+        "centroid_lon": 78.82671472310935,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 97,
+        "name": "Narsapur GP-2",
+        "block_name": "Narsapur",
+        "block_id": 20,
+        "centroid_lat": 17.601629718890027,
+        "centroid_lon": 78.85437714266993,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 98,
+        "name": "Narsapur GP-3",
+        "block_name": "Narsapur",
+        "block_id": 20,
+        "centroid_lat": 17.59643234482473,
+        "centroid_lon": 78.7984305623811,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 99,
+        "name": "Narsapur GP-4",
+        "block_name": "Narsapur",
+        "block_id": 20,
+        "centroid_lat": 17.613853192151197,
+        "centroid_lon": 78.79889107630817,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 100,
+        "name": "Narsapur GP-5",
+        "block_name": "Narsapur",
+        "block_id": 20,
+        "centroid_lat": 17.5141689842042,
+        "centroid_lon": 78.86940548707625,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 101,
+        "name": "Toopran GP-1",
+        "block_name": "Toopran",
+        "block_id": 21,
+        "centroid_lat": 17.922016557064012,
+        "centroid_lon": 77.64223425527052,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 102,
+        "name": "Toopran GP-2",
+        "block_name": "Toopran",
+        "block_id": 21,
+        "centroid_lat": 18.07070645852686,
+        "centroid_lon": 77.65995088656085,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 103,
+        "name": "Toopran GP-3",
+        "block_name": "Toopran",
+        "block_id": 21,
+        "centroid_lat": 18.003136504333423,
+        "centroid_lon": 77.6785160810762,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 104,
+        "name": "Toopran GP-4",
+        "block_name": "Toopran",
+        "block_id": 21,
+        "centroid_lat": 18.023306098111675,
+        "centroid_lon": 77.5718341486181,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 105,
+        "name": "Toopran GP-5",
+        "block_name": "Toopran",
+        "block_id": 21,
+        "centroid_lat": 17.919188187047652,
+        "centroid_lon": 77.66119936591683,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 106,
+        "name": "Ramayampet GP-1",
+        "block_name": "Ramayampet",
+        "block_id": 22,
+        "centroid_lat": 18.012901670491942,
+        "centroid_lon": 78.26275546833403,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 107,
+        "name": "Ramayampet GP-2",
+        "block_name": "Ramayampet",
+        "block_id": 22,
+        "centroid_lat": 18.056016963725696,
+        "centroid_lon": 78.20412641111089,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 108,
+        "name": "Ramayampet GP-3",
+        "block_name": "Ramayampet",
+        "block_id": 22,
+        "centroid_lat": 18.006871220030288,
+        "centroid_lon": 78.20183865575231,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 109,
+        "name": "Ramayampet GP-4",
+        "block_name": "Ramayampet",
+        "block_id": 22,
+        "centroid_lat": 17.98131803987049,
+        "centroid_lon": 78.16504819486671,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 110,
+        "name": "Ramayampet GP-5",
+        "block_name": "Ramayampet",
+        "block_id": 22,
+        "centroid_lat": 17.95981161577774,
+        "centroid_lon": 78.2712728594889,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 111,
+        "name": "Dubbak GP-1",
+        "block_name": "Dubbak",
+        "block_id": 23,
+        "centroid_lat": 18.06039805882834,
+        "centroid_lon": 78.85262549620352,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 112,
+        "name": "Dubbak GP-2",
+        "block_name": "Dubbak",
+        "block_id": 23,
+        "centroid_lat": 18.048845710915305,
+        "centroid_lon": 78.82371489633186,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 113,
+        "name": "Dubbak GP-3",
+        "block_name": "Dubbak",
+        "block_id": 23,
+        "centroid_lat": 17.916759952397605,
+        "centroid_lon": 78.93280252130789,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 114,
+        "name": "Dubbak GP-4",
+        "block_name": "Dubbak",
+        "block_id": 23,
+        "centroid_lat": 17.982507151296737,
+        "centroid_lon": 78.86004336244066,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 115,
+        "name": "Dubbak GP-5",
+        "block_name": "Dubbak",
+        "block_id": 23,
+        "centroid_lat": 17.90972686360313,
+        "centroid_lon": 78.83604595846732,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 116,
+        "name": "Narayankhed GP-1",
+        "block_name": "Narayankhed",
+        "block_id": 24,
+        "centroid_lat": 18.330748203797494,
+        "centroid_lon": 77.51704025360591,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 117,
+        "name": "Narayankhed GP-2",
+        "block_name": "Narayankhed",
+        "block_id": 24,
+        "centroid_lat": 18.44471003495506,
+        "centroid_lon": 77.51649053656064,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 118,
+        "name": "Narayankhed GP-3",
+        "block_name": "Narayankhed",
+        "block_id": 24,
+        "centroid_lat": 18.32237912388138,
+        "centroid_lon": 77.6215670777084,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 119,
+        "name": "Narayankhed GP-4",
+        "block_name": "Narayankhed",
+        "block_id": 24,
+        "centroid_lat": 18.472356612923722,
+        "centroid_lon": 77.52668204544868,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 120,
+        "name": "Narayankhed GP-5",
+        "block_name": "Narayankhed",
+        "block_id": 24,
+        "centroid_lat": 18.415672959022213,
+        "centroid_lon": 77.56469132325525,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 121,
+        "name": "Sangareddy GP-1",
+        "block_name": "Sangareddy",
+        "block_id": 25,
+        "centroid_lat": 18.382890976775016,
+        "centroid_lon": 78.21292599253334,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 122,
+        "name": "Sangareddy GP-2",
+        "block_name": "Sangareddy",
+        "block_id": 25,
+        "centroid_lat": 18.365335150221455,
+        "centroid_lon": 78.37017129272782,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 123,
+        "name": "Sangareddy GP-3",
+        "block_name": "Sangareddy",
+        "block_id": 25,
+        "centroid_lat": 18.37921086767516,
+        "centroid_lon": 78.22756483257047,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 124,
+        "name": "Sangareddy GP-4",
+        "block_name": "Sangareddy",
+        "block_id": 25,
+        "centroid_lat": 18.35999836399461,
+        "centroid_lon": 78.366119441747,
+        "is_synthetic": true
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 125,
+        "name": "Sangareddy GP-5",
+        "block_name": "Sangareddy",
+        "block_id": 25,
+        "centroid_lat": 18.433120878818297,
+        "centroid_lon": 78.33986636450264,
+        "is_synthetic": true
+      },
+      "geometry": null
+    }
+  ],
+  "_warning": "SYNTHETIC panchayat names and locations"
+}

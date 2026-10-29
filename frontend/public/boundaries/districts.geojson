@@ -1,0 +1,117 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1,
+        "name": "Mahbubnagar",
+        "lgd_code": 532,
+        "state": "Telangana",
+        "is_synthetic": true
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.05,
+              15.55
+            ],
+            [
+              78.45,
+              15.55
+            ],
+            [
+              78.45,
+              16.95
+            ],
+            [
+              77.05,
+              16.95
+            ],
+            [
+              77.05,
+              15.55
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2,
+        "name": "Nalgonda",
+        "lgd_code": 531,
+        "state": "Telangana",
+        "is_synthetic": true
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.55,
+              16.55
+            ],
+            [
+              79.95,
+              16.55
+            ],
+            [
+              79.95,
+              17.45
+            ],
+            [
+              78.55,
+              17.45
+            ],
+            [
+              78.55,
+              16.55
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3,
+        "name": "Medak",
+        "lgd_code": 528,
+        "state": "Telangana",
+        "is_synthetic": true
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.55,
+              17.55
+            ],
+            [
+              78.95,
+              17.55
+            ],
+            [
+              78.95,
+              18.45
+            ],
+            [
+              77.55,
+              18.45
+            ],
+            [
+              77.55,
+              17.55
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "_warning": "SYNTHETIC boundaries"
+}

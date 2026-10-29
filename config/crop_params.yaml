@@ -1,0 +1,161 @@
+# =============================================================================
+# Varsha — Crop Parameters (FAO-56 Style)
+# Crop coefficients, growth stages, and sowing windows for pilot crops
+# Source: FAO Irrigation & Drainage Paper 56, ICAR-CRIDA guidelines
+# =============================================================================
+
+crops:
+  cotton:
+    display_name: "Cotton"
+    display_name_te: "పత్తి"
+    display_name_hi: "कपास"
+    variety: "Bt Cotton (Bunny, Mallika)"
+    sowing_window:
+      earliest_doy: 152       # June 1
+      optimal_doy: 166        # June 15
+      latest_doy: 196         # July 15
+    growth_stages:
+      initial:
+        duration_days: 30
+        kc: 0.35
+        critical_dry_spell_days: 5   # Seedling very sensitive
+      development:
+        duration_days: 50
+        kc: 0.75
+      mid_season:
+        duration_days: 55
+        kc: 1.15
+      late_season:
+        duration_days: 45
+        kc: 0.60
+    soil:
+      root_depth_max_m: 1.3
+      depletion_fraction: 0.65     # p (RAW/TAW)
+    economics:
+      seed_cost_per_ha: 5000       # INR
+      total_cost_per_ha: 45000
+      expected_yield_kg_per_ha: 2000
+      msp_per_kg: 63.0             # 2023-24 MSP
+
+  soybean:
+    display_name: "Soybean"
+    display_name_te: "సోయాబీన్"
+    display_name_hi: "सोयाबीन"
+    variety: "JS 335, JS 9560"
+    sowing_window:
+      earliest_doy: 166        # June 15
+      optimal_doy: 176         # June 25
+      latest_doy: 196          # July 15
+    growth_stages:
+      initial:
+        duration_days: 20
+        kc: 0.40
+        critical_dry_spell_days: 4
+      development:
+        duration_days: 30
+        kc: 0.80
+      mid_season:
+        duration_days: 40
+        kc: 1.15
+      late_season:
+        duration_days: 20
+        kc: 0.50
+    soil:
+      root_depth_max_m: 0.9
+      depletion_fraction: 0.50
+    economics:
+      seed_cost_per_ha: 4500
+      total_cost_per_ha: 35000
+      expected_yield_kg_per_ha: 1800
+      msp_per_kg: 44.0
+
+  groundnut:
+    display_name: "Groundnut"
+    display_name_te: "వేరుశెనగ"
+    display_name_hi: "मूंगफली"
+    variety: "TMV 2, K-6"
+    sowing_window:
+      earliest_doy: 166        # June 15
+      optimal_doy: 176         # June 25
+      latest_doy: 196          # July 15
+    growth_stages:
+      initial:
+        duration_days: 25
+        kc: 0.40
+        critical_dry_spell_days: 5
+      development:
+        duration_days: 35
+        kc: 0.75
+      mid_season:
+        duration_days: 35
+        kc: 1.05
+      late_season:
+        duration_days: 25
+        kc: 0.55
+    soil:
+      root_depth_max_m: 0.7
+      depletion_fraction: 0.50
+    economics:
+      seed_cost_per_ha: 8000
+      total_cost_per_ha: 40000
+      expected_yield_kg_per_ha: 1500
+      msp_per_kg: 59.0
+
+  paddy:
+    display_name: "Paddy (Kharif)"
+    display_name_te: "వరి"
+    display_name_hi: "धान"
+    variety: "BPT 5204 (Samba Mahsuri), MTU 1010"
+    sowing_window:
+      earliest_doy: 152        # June 1
+      optimal_doy: 172         # June 21
+      latest_doy: 210          # July 29
+    growth_stages:
+      initial:
+        duration_days: 30
+        kc: 1.05               # Paddy needs standing water
+        critical_dry_spell_days: 3
+      development:
+        duration_days: 30
+        kc: 1.20
+      mid_season:
+        duration_days: 40
+        kc: 1.20
+      late_season:
+        duration_days: 30
+        kc: 0.90
+    soil:
+      root_depth_max_m: 0.6
+      depletion_fraction: 0.20     # Very sensitive to stress
+    economics:
+      seed_cost_per_ha: 3000
+      total_cost_per_ha: 55000
+      expected_yield_kg_per_ha: 4500
+      msp_per_kg: 22.0
+
+# --- Soil defaults for pilot region (can override per block) ---
+soil_defaults:
+  field_capacity: 0.30        # Volumetric water content (m³/m³)
+  wilting_point: 0.15
+  soil_depth_m: 1.0
+  runoff_coefficient: 0.25    # Simple runoff fraction (CN-based upgrade later)
+  # Telangana: predominantly red soils (Alfisols) and black cotton soils (Vertisols)
+  predominant_type: "red_sandy_loam"
+
+# --- Reference ET (Hargreaves or from ERA5) ---
+eto:
+  method: "hargreaves"        # or "era5_direct"
+  # Fallback monthly ET0 (mm/day) for Telangana from historical average
+  monthly_defaults:
+    1: 3.5
+    2: 4.5
+    3: 6.0
+    4: 7.0
+    5: 7.5
+    6: 5.5    # Monsoon onset reduces ET
+    7: 4.5
+    8: 4.5
+    9: 4.5
+    10: 4.5
+    11: 3.8
+    12: 3.2

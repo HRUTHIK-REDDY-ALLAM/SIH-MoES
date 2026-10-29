@@ -1,0 +1,72 @@
+# =============================================================================
+# Varsha — Hindi Glossary for Crop and Weather Terms
+# =============================================================================
+
+weather:
+  monsoon: "मानसून"
+  rainfall: "वर्षा"
+  rain: "बारिश"
+  dry_spell: "सूखा काल"
+  heavy_rain: "भारी बारिश"
+  very_heavy_rain: "बहुत भारी बारिश"
+  onset: "शुरुआत"
+  false_onset: "झूठी शुरुआत"
+  monsoon_break: "मानसून विराम"
+  active_monsoon: "सक्रिय मानसून"
+  forecast: "मौसम पूर्वानुमान"
+  probability: "संभावना"
+  confidence: "विश्वास"
+  temperature: "तापमान"
+  humidity: "आर्द्रता"
+  wind: "हवा"
+  cloud: "बादल"
+  flood: "बाढ़"
+  drought: "सूखा"
+
+crops:
+  cotton: "कपास"
+  soybean: "सोयाबीन"
+  groundnut: "मूंगफली"
+  paddy: "धान"
+  rice: "चावल"
+  maize: "मक्का"
+  pigeon_pea: "अरहर"
+  green_gram: "मूंग"
+  black_gram: "उड़द"
+  sunflower: "सूरजमुखी"
+  castor: "अरंडी"
+  sorghum: "ज्वार"
+  finger_millet: "रागी"
+  sesame: "तिल"
+
+farming:
+  sowing: "बुवाई"
+  harvesting: "कटाई"
+  seedling: "पौधा"
+  fertiliser: "उर्वरक"
+  pesticide: "कीटनाशक"
+  irrigation: "सिंचाई"
+  soil_moisture: "मिट्टी की नमी"
+  mulching: "मल्चिंग"
+  land_preparation: "भूमि तैयारी"
+  crop_stage: "फसल अवस्था"
+  yield: "उपज"
+  crop_damage: "फसल क्षति"
+  waterlogging: "जलभराव"
+  drainage: "जल निकासी"
+
+actions:
+  sow: "बुवाई करें"
+  wait: "प्रतीक्षा करें"
+  switch: "बदलें"
+  protect: "सुरक्षित करें"
+  alert: "चेतावनी"
+  prepare: "तैयारी करें"
+  conserve: "बचाएं"
+
+time:
+  today: "आज"
+  tomorrow: "कल"
+  this_week: "इस सप्ताह"
+  next_week: "अगले सप्ताह"
+  days: "दिन"

@@ -1,0 +1,68 @@
+# =============================================================================
+# Varsha — Python Dependencies (Backend + Pipeline + Models)
+# Pin all versions for reproducibility
+# =============================================================================
+
+# --- Web Framework ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.3
+pydantic-settings==2.7.0
+python-multipart==0.0.20
+
+# --- Database ---
+sqlalchemy==2.0.36
+asyncpg==0.30.0
+alembic==1.14.0
+geoalchemy2==0.17.1
+psycopg2-binary==2.9.10
+
+# --- Data Processing ---
+numpy==1.26.4
+pandas==2.2.3
+xarray==2024.11.0
+netcdf4==1.7.2
+scipy==1.14.1
+geopandas==1.0.1
+shapely==2.0.6
+fiona==1.10.1
+rasterio==1.4.3
+pyproj==3.7.0
+
+# --- ML & Stats ---
+scikit-learn==1.6.0
+lightgbm==4.5.0
+ngboost==0.5.1
+lifelines==0.29.0
+hmmlearn==0.3.3
+shap==0.46.0
+statsmodels==0.14.4
+
+# --- Visualization (for verification reports) ---
+matplotlib==3.9.3
+seaborn==0.13.2
+plotly==5.24.1
+
+# --- HTTP & Data Fetching ---
+httpx==0.28.1
+aiohttp==3.11.11
+requests==2.32.3
+cdsapi==0.7.5
+
+# --- Configuration ---
+pyyaml==6.0.2
+python-dotenv==1.0.1
+
+# --- Scheduling ---
+apscheduler==3.10.4
+
+# --- Testing ---
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+
+# --- Translation ---
+indic-transliteration==2.4.1
+
+# --- Geospatial utilities ---
+area==1.1.1
