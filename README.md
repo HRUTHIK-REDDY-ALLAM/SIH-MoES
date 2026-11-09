@@ -5,6 +5,12 @@ Village-level monsoon onset and break outlooks for farmers, with crop advice the
 Built for **Smart India Hackathon 2026**, problem statement **26086**: *Hyperlocal Monsoon Onset & Break
 Prediction System (Block/Village Scale)*, from the Ministry of Earth Sciences / NCMRWF.
 
+**Live demo:** https://prompt-rowan-5b6qk1m.tmp.now/
+
+This is the website only, running read-only on the committed 2023 data. The officer console, approvals and
+rain reports need the backend, so run it locally (see below). The link is a temporary Vercel preview and may
+expire.
+
 ---
 
 ## Why we built this
@@ -475,10 +481,4 @@ opening it. If you change an event definition or an advisory rule, update `confi
 in the same pull request. The whole point is that training, verification and the advice farmers receive all
 use the same definitions.
 
-## Author
 
-Hruthik Reddy Allam, for Smart India Hackathon 2026.
-
-## License
-
-MIT
