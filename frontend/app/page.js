@@ -10,7 +10,7 @@ import {
 } from "./components/Panels";
 import { getBlock, getBoundaries, getLatest, getPanchayat } from "./lib/api";
 import {
-  ACTION_COLOR, CROPS, EVENTS, EVENT_BY_KEY, HORIZONS, HORIZON_LABEL, PALETTES, fmtDate, pct, rainMax,
+  ACTION_COLOR, CROPS, EVENTS, EVENT_BY_KEY, HORIZONS, HORIZON_LABEL, ONSET_ESTABLISHED_COLOR, PALETTES, fmtDate, pct, rainMax,
 } from "./lib/format";
 
 const RiskMap = dynamic(() => import("./components/RiskMap"), { ssr: false });
@@ -58,10 +58,10 @@ export default function Dashboard() {
     if (!data || eventKey !== "onset") return {};
     const est = Object.fromEntries(data.blocks.filter((b) => b.onset_status === "established").map((b) => [b.id, b.onset_date]));
     if (level === "block") {
-      return Object.fromEntries(Object.entries(est).map(([id, d]) => [id, { color: "#0f766e", label: `established ${d}` }]));
+      return Object.fromEntries(Object.entries(est).map(([id, d]) => [id, { color: ONSET_ESTABLISHED_COLOR, label: `established ${d}` }]));
     }
     return Object.fromEntries(data.panchayats.filter((p) => est[p.block_id] !== undefined)
-      .map((p) => [p.id, { color: "#0f766e", label: `established ${est[p.block_id]}` }]));
+      .map((p) => [p.id, { color: ONSET_ESTABLISHED_COLOR, label: `established ${est[p.block_id]}` }]));
   }, [data, eventKey, level]);
 
   const labelFor = useCallback((props, v, ov) => {
@@ -111,7 +111,7 @@ export default function Dashboard() {
             <div className="tiny muted">{HORIZON_LABEL[h]} from {data ? fmtDate(data.issue_date) : "…"}</div>
             <div className="legend-bar" style={{ background: `linear-gradient(90deg, ${legendStops.join(",")})` }} />
             <div className="row between tiny muted"><span>0{ev.unit ? " mm" : "%"}</span><span>{ev.unit ? `${max}+ mm` : "100%"}</span></div>
-            {eventKey === "onset" && <div className="row tiny" style={{ marginTop: 6 }}><span style={{ width: 12, height: 12, background: "#0f766e", display: "inline-block", borderRadius: 3 }} /> Onset established</div>}
+            {eventKey === "onset" && <div className="row tiny" style={{ marginTop: 6 }}><span style={{ width: 12, height: 12, background: ONSET_ESTABLISHED_COLOR, display: "inline-block", borderRadius: 3 }} /> Onset established</div>}
           </div>
         </div>
 

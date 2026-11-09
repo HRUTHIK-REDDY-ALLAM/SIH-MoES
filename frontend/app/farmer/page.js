@@ -179,8 +179,8 @@ export default function FarmerPage() {
                 <div className="week" key={x.horizon_days}>
                   <div className="tiny muted">{x.horizon_days} {t.days}</div>
                   <div className="big">🌧️ {Math.round(x.rainfall_median)}<span className="tiny"> mm</span></div>
-                  <div className="tiny" style={{ color: "#fca5a5" }}>{t.dry} {Math.round(x.prob_dry_spell_7d * 100)}%</div>
-                  <div className="tiny" style={{ color: "#93c5fd" }}>{t.heavy} {Math.round(x.prob_heavy_rain * 100)}%</div>
+                  <div className="tiny" style={{ color: "#b91c1c" }}>{t.dry} {Math.round(x.prob_dry_spell_7d * 100)}%</div>
+                  <div className="tiny" style={{ color: "#1d4ed8" }}>{t.heavy} {Math.round(x.prob_heavy_rain * 100)}%</div>
                 </div>
               ))}
             </div>

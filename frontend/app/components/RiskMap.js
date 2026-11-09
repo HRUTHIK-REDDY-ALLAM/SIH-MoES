@@ -53,26 +53,26 @@ export default function RiskMap({
           districts: geo, blocks: geo, panchayats: geo, selected: geo,
         },
         layers: [
-          { id: "bg", type: "background", paint: { "background-color": "#0a0f1e" } },
-          // keyless OSM tiles, desaturated and darkened to sit under the risk colours
+          { id: "bg", type: "background", paint: { "background-color": "#e8edf3" } },
+          // keyless OSM tiles, softly desaturated to sit under the risk colours
           { id: "osm", type: "raster", source: "osm",
-            paint: { "raster-saturation": -1, "raster-brightness-max": 0.32, "raster-contrast": 0.15, "raster-opacity": 0.9 } },
+            paint: { "raster-saturation": -0.75, "raster-contrast": -0.05, "raster-opacity": 0.85 } },
           { id: "panch-fill", type: "fill", source: "panchayats",
             paint: { "fill-color": ["coalesce", ["get", "color"], "rgba(0,0,0,0)"], "fill-opacity": 0.78 }, layout: { visibility: "none" } },
-          { id: "panch-line", type: "line", source: "panchayats", paint: { "line-color": "#0a0f1e", "line-width": 0.6 },
+          { id: "panch-line", type: "line", source: "panchayats", paint: { "line-color": "#ffffff", "line-width": 0.7 },
             layout: { visibility: "none" } },
           { id: "block-fill", type: "fill", source: "blocks",
             paint: { "fill-color": ["coalesce", ["get", "color"], "rgba(0,0,0,0)"], "fill-opacity": 0.8 } },
-          { id: "block-line", type: "line", source: "blocks", paint: { "line-color": "#0a0f1e", "line-width": 1.2 } },
+          { id: "block-line", type: "line", source: "blocks", paint: { "line-color": "#ffffff", "line-width": 1.2 } },
           { id: "district-line", type: "line", source: "districts",
-            paint: { "line-color": "#94a3b8", "line-width": 1.6, "line-dasharray": [3, 2] } },
-          { id: "selected-line", type: "line", source: "selected", paint: { "line-color": "#ffffff", "line-width": 3 } },
+            paint: { "line-color": "#12355b", "line-width": 1.6, "line-dasharray": [3, 2] } },
+          { id: "selected-line", type: "line", source: "selected", paint: { "line-color": "#0a2540", "line-width": 3.2 } },
           { id: "block-label", type: "symbol", source: "blocks", minzoom: 7.2,
             layout: { "text-field": ["get", "name"], "text-size": 11, "text-font": ["Open Sans Regular"] },
-            paint: { "text-color": "#f1f5f9", "text-halo-color": "#0a0f1e", "text-halo-width": 1.4 } },
+            paint: { "text-color": "#0a2540", "text-halo-color": "#ffffff", "text-halo-width": 1.6 } },
           { id: "district-label", type: "symbol", source: "districts", maxzoom: 7.4,
             layout: { "text-field": ["get", "name"], "text-size": 13, "text-font": ["Open Sans Semibold"], "text-allow-overlap": true },
-            paint: { "text-color": "#cbd5e1", "text-halo-color": "#0a0f1e", "text-halo-width": 2 } },
+            paint: { "text-color": "#12355b", "text-halo-color": "#ffffff", "text-halo-width": 2 } },
         ],
       },
       center: [78.5, 17.0],
@@ -141,7 +141,7 @@ export default function RiskMap({
     map.setLayoutProperty("panch-fill", "visibility", isBlock ? "none" : "visible");
     map.setLayoutProperty("panch-line", "visibility", isBlock ? "none" : "visible");
     map.setPaintProperty("block-fill", "fill-opacity", isBlock ? 0.8 : 0);
-    map.setPaintProperty("block-line", "line-color", isBlock ? "#0a0f1e" : "#e2e8f0");
+    map.setPaintProperty("block-line", "line-color", isBlock ? "#ffffff" : "#12355b");
     map.setPaintProperty("block-line", "line-width", isBlock ? 1.2 : 1.4);
   }, [loaded, districts, blocks, panchayats, level, values, palette, max, overrides, labelFor]);
 

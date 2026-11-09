@@ -6,7 +6,7 @@ import Header from "../components/Header";
 import { ReplayChart } from "../components/Charts";
 import { ActionBadge, SourceBadge } from "../components/Panels";
 import { getBoundaries, getReplay } from "../lib/api";
-import { CROPS, EVENT_BY_KEY, HORIZON_LABEL, ONSET_STATUS, fmtDate, pct, rainMax } from "../lib/format";
+import { CROPS, EVENT_BY_KEY, HORIZON_LABEL, ONSET_ESTABLISHED_COLOR, ONSET_STATUS, fmtDate, pct, rainMax } from "../lib/format";
 
 const RiskMap = dynamic(() => import("../components/RiskMap"), { ssr: false });
 
@@ -54,7 +54,7 @@ export default function ReplayPage() {
     if (!rp || eventKey !== "onset") return {};
     const st = rp.onset_status[i] || [];
     return Object.fromEntries(rp.blocks.map((b, j) => [b.id, st[j]]).filter(([, s]) => rp.onset_codes[s] === "established")
-      .map(([id]) => [id, { color: "#0f766e", label: "established" }]));
+      .map(([id]) => [id, { color: ONSET_ESTABLISHED_COLOR, label: "established" }]));
   }, [rp, eventKey, i]);
 
   if (error) return (<><Header /><div className="page"><div className="notice error">{error}</div></div></>);

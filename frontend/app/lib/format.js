@@ -13,13 +13,16 @@ export const EVENTS = [
 ];
 export const EVENT_BY_KEY = Object.fromEntries(EVENTS.map((e) => [e.key, e]));
 
+// Sequential light → dark scales (low value = light) for the light portal basemap.
 export const PALETTES = {
-  green: ["#0b2a22", "#065f46", "#059669", "#34d399", "#a7f3d0"],
-  amber: ["#2d1d06", "#92400e", "#d97706", "#fbbf24", "#fde68a"],
-  red: ["#2a0d0d", "#991b1b", "#dc2626", "#f87171", "#fecaca"],
-  blue: ["#0c1a33", "#1e40af", "#2563eb", "#60a5fa", "#bfdbfe"],
-  rain: ["#2b1d0e", "#7c5a2a", "#4d7c8a", "#2b8cbe", "#a6e3ff"],
+  green: ["#f2f9d4", "#c2e699", "#78c679", "#31a354", "#006837"],
+  amber: ["#fff7cc", "#fee391", "#fec44f", "#ec7014", "#993404"],
+  red: ["#fee5d9", "#fcae91", "#fb6a4a", "#de2d26", "#a50f15"],
+  blue: ["#e8f0fb", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"],
+  rain: ["#a6611a", "#dfc27d", "#c6dbef", "#4292c6", "#084594"],
 };
+// Map colour for blocks where onset is already established (distinct from every risk scale).
+export const ONSET_ESTABLISHED_COLOR = "#3b2f8f";
 
 export function rainMax(h) {
   return { 7: 60, 14: 110, 21: 160, 30: 220 }[h] || 100;
@@ -43,10 +46,10 @@ export const CROPS = [
 ];
 
 export const ONSET_STATUS = {
-  not_yet: { label: "Not yet", color: "#64748b" },
-  provisional: { label: "Provisional (watch for false onset)", color: "#f59e0b" },
-  established: { label: "Established", color: "#10b981" },
-  false_onset: { label: "False onset — rains failed", color: "#ef4444" },
+  not_yet: { label: "Not yet", color: "#475569" },
+  provisional: { label: "Provisional (watch for false onset)", color: "#b45309" },
+  established: { label: "Established", color: "#047857" },
+  false_onset: { label: "False onset — rains failed", color: "#b91c1c" },
 };
 
 export const REGIME = {
@@ -64,7 +67,7 @@ export function fmtDate(s, opts = { day: "numeric", month: "short", year: "numer
 
 export function colorFor(value, palette, max = 1) {
   const stops = PALETTES[palette] || PALETTES.blue;
-  if (value === null || value === undefined) return "#1f2937";
+  if (value === null || value === undefined) return "#d6dce4";
   const t = Math.max(0, Math.min(1, value / max)) * (stops.length - 1);
   const i = Math.floor(t);
   return stops[Math.min(i + (t - i > 0.5 ? 1 : 0), stops.length - 1)];

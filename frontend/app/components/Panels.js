@@ -24,7 +24,7 @@ export function ConfidenceTag({ level }) {
 
 export function DriversCard({ drivers }) {
   if (!drivers || !drivers.date) return null;
-  const mjoColor = drivers.mjo_impact?.startsWith("break") ? "#f87171" : drivers.mjo_impact?.startsWith("active") ? "#34d399" : "#cbd5e1";
+  const mjoColor = drivers.mjo_impact?.startsWith("break") ? "#b91c1c" : drivers.mjo_impact?.startsWith("active") ? "#047857" : "#12355b";
   return (
     <div className="card">
       <div className="row between">
@@ -83,7 +83,7 @@ export function ProbBars({ forecast }) {
           </div>
         );
       })}
-      <p className="tiny muted" style={{ margin: "4px 0 0" }}>White tick = usual chance for this time of year (climatology).</p>
+      <p className="tiny muted" style={{ margin: "4px 0 0" }}>Dark tick = usual chance for this time of year (climatology).</p>
     </div>
   );
 }
