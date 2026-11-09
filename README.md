@@ -5,11 +5,23 @@ Village-level monsoon onset and break outlooks for farmers, with crop advice the
 Built for **Smart India Hackathon 2026**, problem statement **26086**: *Hyperlocal Monsoon Onset & Break
 Prediction System (Block/Village Scale)*, from the Ministry of Earth Sciences / NCMRWF.
 
-**Live demo:** https://prompt-rowan-5b6qk1m.tmp.now/
+[![Live demo](https://img.shields.io/badge/live%20demo-open%20the%20site-138808?style=for-the-badge)](https://prompt-rowan-5b6qk1m.tmp.now/)
+
+## Deployed link
+
+**https://prompt-rowan-5b6qk1m.tmp.now/**
+
+| Page | Address |
+|---|---|
+| Risk map | https://prompt-rowan-5b6qk1m.tmp.now/ |
+| Farmer view | https://prompt-rowan-5b6qk1m.tmp.now/farmer |
+| Officer console | https://prompt-rowan-5b6qk1m.tmp.now/officer |
+| 2023 replay | https://prompt-rowan-5b6qk1m.tmp.now/replay |
+| Forecast verification | https://prompt-rowan-5b6qk1m.tmp.now/skill |
 
 This is the website only, running read-only on the committed 2023 data. The officer console, approvals and
 rain reports need the backend, so run it locally (see below). The link is a temporary Vercel preview and may
-expire.
+expire, so if it doesn't open, run the project yourself using the steps further down.
 
 ---
 
@@ -456,6 +468,31 @@ frontend/      Next.js web app (risk map, farmer view, officer console, replay, 
 scripts/       bootstrap_demo, load_boundaries, create_tables, extract_chirps_blocks
 tests/         pytest suite
 ```
+
+## Deploying the website yourself
+
+The web app can be served as plain static files, with no server. It reads the committed JSON in
+`frontend/public/data/` whenever the API isn't reachable.
+
+```bash
+cd frontend
+npm install
+STATIC_EXPORT=1 npm run build
+```
+
+On Windows PowerShell, set the variable first: `$env:STATIC_EXPORT="1"; npm run build`.
+
+That writes the site to `frontend/out/`. Upload that folder to any static host. With Vercel:
+
+```bash
+npm install --global vercel@latest
+vercel login
+cd out
+vercel deploy --prod
+```
+
+For the full system (officer console, SMS / WhatsApp), host the FastAPI backend somewhere too, then set
+`NEXT_PUBLIC_API_URL` to its address before building.
 
 ## When something goes wrong
 
