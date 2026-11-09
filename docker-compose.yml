@@ -43,6 +43,7 @@ services:
       - ./models:/app/models
       - ./impact:/app/impact
       - ./translation:/app/translation
+      - ./artifacts:/app/artifacts
     depends_on:
       db:
         condition: service_healthy
@@ -82,7 +83,7 @@ services:
       db:
         condition: service_healthy
     profiles:
-      - pipeline  # Only run with: docker compose --profile pipeline run pipeline
+      - pipeline  # docker compose --profile pipeline run pipeline python scripts/bootstrap_demo.py
     command: python -m backend.pipeline.daily_run
 
 volumes:

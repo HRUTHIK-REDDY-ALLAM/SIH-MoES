@@ -1,447 +1,297 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import Header from "./components/Header";
+import { RainFan, SeasonChart } from "./components/Charts";
+import {
+  ActionBadge, AdvisoryCard, ConfidenceTag, DriverChips, DriversCard, OnsetPill, ProbBars, RegimeLine, SourceBadge,
+} from "./components/Panels";
+import { getBlock, getBoundaries, getLatest, getPanchayat } from "./lib/api";
+import {
+  ACTION_COLOR, CROPS, EVENTS, EVENT_BY_KEY, HORIZONS, HORIZON_LABEL, PALETTES, fmtDate, pct, rainMax,
+} from "./lib/format";
 
-// Dynamic import for MapLibre to avoid SSR issues
 const RiskMap = dynamic(() => import("./components/RiskMap"), { ssr: false });
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const EVENT_FOR_EXPLAIN = { onset: "onset", false_onset: "false_onset", dry_spell: "dry_spell_7d", dry_spell_14d: "dry_spell_7d", heavy_rain: "heavy_rain", rainfall: "dry_spell_7d" };
 
 export default function Dashboard() {
-  const [districts, setDistricts] = useState(null);
-  const [blocks, setBlocks] = useState(null);
-  const [selectedBlock, setSelectedBlock] = useState(null);
-  const [activeTab, setActiveTab] = useState("onset");
-  const [horizon, setHorizon] = useState(7);
+  const [bnd, setBnd] = useState(null);
+  const [data, setData] = useState(null);
+  const [source, setSource] = useState(null);
+  const [error, setError] = useState(null);
+  const [eventKey, setEventKey] = useState("dry_spell");
+  const [h, setH] = useState(7);
+  const [level, setLevel] = useState("block");
+  const [sel, setSel] = useState(null);
 
   useEffect(() => {
-    // Load boundary GeoJSON from public directory (works without backend)
-    fetch("/boundaries/districts.geojson")
-      .then((r) => r.json())
-      .then(setDistricts)
-      .catch(() => console.log("Districts GeoJSON not loaded"));
-
-    fetch("/boundaries/blocks.geojson")
-      .then((r) => r.json())
-      .then(setBlocks)
-      .catch(() => console.log("Blocks GeoJSON not loaded"));
+    getBoundaries().then(setBnd).catch((e) => setError(String(e)));
+    getLatest()
+      .then(({ data, source }) => {
+        setData(data);
+        setSource(source);
+        // Deep links: /?block=5 or /?panchayat=12 open the detail panel directly
+        const q = new URLSearchParams(window.location.search);
+        if (q.get("panchayat")) {
+          setLevel("panchayat");
+          setSel({ level: "panchayat", id: Number(q.get("panchayat")) });
+        } else if (q.get("block")) {
+          setSel({ level: "block", id: Number(q.get("block")) });
+        }
+      })
+      .catch((e) => setError(e.message));
   }, []);
 
-  const riskTabs = [
-    { key: "onset", label: "🌱 Onset", color: "#10b981" },
-    { key: "false_onset", label: "⚠️ False Onset", color: "#f59e0b" },
-    { key: "dry_spell", label: "☀️ Dry Spell", color: "#ef4444" },
-    { key: "heavy_rain", label: "🌧️ Heavy Rain", color: "#3b82f6" },
-  ];
+  const ev = EVENT_BY_KEY[eventKey];
+  const max = ev.unit === "mm" ? rainMax(h) : 1;
 
-  const horizonOptions = [
-    { days: 7, label: "Week 1" },
-    { days: 14, label: "Week 2" },
-    { days: 21, label: "Week 3" },
-    { days: 30, label: "Week 4" },
-  ];
+  const values = useMemo(() => {
+    if (!data) return {};
+    const rows = level === "block" ? data.blocks : data.panchayats;
+    return Object.fromEntries(rows.map((r) => [r.id, r.horizons?.[String(h)]?.[ev.field] ?? null]));
+  }, [data, level, h, ev]);
+
+  const overrides = useMemo(() => {
+    if (!data || eventKey !== "onset") return {};
+    const est = Object.fromEntries(data.blocks.filter((b) => b.onset_status === "established").map((b) => [b.id, b.onset_date]));
+    if (level === "block") {
+      return Object.fromEntries(Object.entries(est).map(([id, d]) => [id, { color: "#0f766e", label: `established ${d}` }]));
+    }
+    return Object.fromEntries(data.panchayats.filter((p) => est[p.block_id] !== undefined)
+      .map((p) => [p.id, { color: "#0f766e", label: `established ${est[p.block_id]}` }]));
+  }, [data, eventKey, level]);
+
+  const labelFor = useCallback((props, v, ov) => {
+    const val = ov ? `Onset ${ov.label}` : ev.unit === "mm" ? `${v == null ? "–" : Math.round(v)} mm` : pct(v);
+    return `<strong>${props.name}</strong><br/>${ev.short} · ${HORIZON_LABEL[h]}: ${val}`;
+  }, [ev, h]);
+
+  const onSelect = useCallback((props) => setSel({ level: props.block_id && level === "panchayat" ? "panchayat" : "block", id: props.id }), [level]);
+
+  const legendStops = PALETTES[ev.palette];
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Header */}
-      <header
-        className="glass"
-        style={{
-          padding: "12px 24px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderBottom: "1px solid var(--border-color)",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: "1.5rem" }}>🌧️</span>
-          <div>
-            <h1
-              style={{
-                margin: 0,
-                fontSize: "1.25rem",
-                fontWeight: 700,
-                background: "linear-gradient(135deg, #3b82f6, #06b6d4)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              Varsha
-            </h1>
-            <p
-              style={{
-                margin: 0,
-                fontSize: "0.7rem",
-                color: "var(--color-text-muted)",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-            >
-              Monsoon Intelligence System
-            </p>
+    <>
+      <Header right={<SourceBadge source={source} synthetic={data?.is_synthetic} />} />
+      <div className="dash">
+        <div className="map-wrap">
+          <div className="map-controls">
+            <div className="seg glass" role="tablist" aria-label="Risk type">
+              {EVENTS.map((e) => (
+                <button key={e.key} className={eventKey === e.key ? "active" : ""} onClick={() => setEventKey(e.key)}>{e.short}</button>
+              ))}
+            </div>
+            <div className="row">
+              <div className="seg glass" aria-label="Horizon">
+                {HORIZONS.map((x) => (
+                  <button key={x} className={h === x ? "active" : ""} onClick={() => setH(x)}>{x === 7 ? "Wk 1" : x === 14 ? "Wk 2" : x === 21 ? "Wk 3" : "Wk 4"}</button>
+                ))}
+              </div>
+              <div className="seg glass" aria-label="Level">
+                {["block", "panchayat"].map((l) => (
+                  <button key={l} className={level === l ? "active" : ""} onClick={() => { setLevel(l); setSel(null); }}>
+                    {l === "block" ? "Blocks" : "Panchayats"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          {bnd && (
+            <RiskMap
+              districts={bnd.districts} blocks={bnd.blocks} panchayats={bnd.panchayats} level={level}
+              values={values} palette={ev.palette} max={max} overrides={overrides} labelFor={labelFor}
+              selectedId={sel && sel.level === level ? sel.id : null} onSelect={onSelect}
+            />
+          )}
+          <div className="legend glass">
+            <div className="row between"><strong>{ev.label}</strong></div>
+            <div className="tiny muted">{HORIZON_LABEL[h]} from {data ? fmtDate(data.issue_date) : "…"}</div>
+            <div className="legend-bar" style={{ background: `linear-gradient(90deg, ${legendStops.join(",")})` }} />
+            <div className="row between tiny muted"><span>0{ev.unit ? " mm" : "%"}</span><span>{ev.unit ? `${max}+ mm` : "100%"}</span></div>
+            {eventKey === "onset" && <div className="row tiny" style={{ marginTop: 6 }}><span style={{ width: 12, height: 12, background: "#0f766e", display: "inline-block", borderRadius: 3 }} /> Onset established</div>}
           </div>
         </div>
 
-        <nav style={{ display: "flex", gap: 8 }}>
-          {[
-            { href: "/", label: "Dashboard", active: true },
-            { href: "/officer", label: "Officer Console" },
-            { href: "/replay", label: "Replay" },
-          ].map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              style={{
-                padding: "6px 14px",
-                borderRadius: "var(--radius-sm)",
-                fontSize: "0.8rem",
-                fontWeight: 500,
-                color: link.active
-                  ? "var(--color-text-primary)"
-                  : "var(--color-text-secondary)",
-                background: link.active
-                  ? "rgba(59, 130, 246, 0.15)"
-                  : "transparent",
-                border: link.active
-                  ? "1px solid rgba(59, 130, 246, 0.3)"
-                  : "1px solid transparent",
-                textDecoration: "none",
-                transition: "all 0.2s",
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span
-            style={{
-              fontSize: "0.75rem",
-              color: "var(--color-text-muted)",
-            }}
-          >
-            Telangana Pilot
-          </span>
-          <div className="synthetic-warning">⚠️ SYNTHETIC DATA</div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main
-        style={{
-          flex: 1,
-          display: "grid",
-          gridTemplateColumns: "1fr 380px",
-          gap: 0,
-          height: "calc(100vh - 64px)",
-        }}
-      >
-        {/* Map Panel */}
-        <div style={{ position: "relative" }}>
-          {/* Risk Type Tabs */}
-          <div
-            className="glass"
-            style={{
-              position: "absolute",
-              top: 16,
-              left: 16,
-              zIndex: 10,
-              display: "flex",
-              gap: 4,
-              padding: 4,
-              borderRadius: "var(--radius-md)",
-            }}
-          >
-            {riskTabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                style={{
-                  padding: "8px 14px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: "0.8rem",
-                  fontWeight: 600,
-                  color:
-                    activeTab === tab.key
-                      ? "#fff"
-                      : "var(--color-text-secondary)",
-                  background:
-                    activeTab === tab.key
-                      ? `${tab.color}33`
-                      : "transparent",
-                  borderBottom:
-                    activeTab === tab.key
-                      ? `2px solid ${tab.color}`
-                      : "2px solid transparent",
-                  transition: "all 0.2s",
-                }}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Horizon Selector */}
-          <div
-            className="glass"
-            style={{
-              position: "absolute",
-              top: 16,
-              right: 16,
-              zIndex: 10,
-              display: "flex",
-              gap: 4,
-              padding: 4,
-              borderRadius: "var(--radius-md)",
-            }}
-          >
-            {horizonOptions.map((opt) => (
-              <button
-                key={opt.days}
-                onClick={() => setHorizon(opt.days)}
-                style={{
-                  padding: "8px 12px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  color:
-                    horizon === opt.days
-                      ? "var(--color-accent-cyan)"
-                      : "var(--color-text-muted)",
-                  background:
-                    horizon === opt.days
-                      ? "rgba(6, 182, 212, 0.15)"
-                      : "transparent",
-                  transition: "all 0.2s",
-                }}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Map */}
-          <RiskMap
-            districts={districts}
-            blocks={blocks}
-            activeTab={activeTab}
-            onBlockSelect={setSelectedBlock}
-          />
-        </div>
-
-        {/* Side Panel */}
-        <aside
-          className="glass"
-          style={{
-            borderLeft: "1px solid var(--border-color)",
-            overflowY: "auto",
-            padding: "20px",
-          }}
-        >
-          {selectedBlock ? (
-            <BlockDetail block={selectedBlock} />
-          ) : (
-            <PilotOverview blocks={blocks} />
+        <aside className="side">
+          {error && <div className="notice error">{error}</div>}
+          {!data && !error && <p className="muted">Loading forecasts…</p>}
+          {data && !sel && <Overview data={data} />}
+          {data && sel?.level === "block" && (
+            <BlockPanel id={sel.id} h={h} eventKey={eventKey} onBack={() => setSel(null)}
+              onPanchayat={(id) => { setLevel("panchayat"); setSel({ level: "panchayat", id }); }} />
+          )}
+          {data && sel?.level === "panchayat" && (
+            <PanchayatPanel id={sel.id} onBack={() => setSel(null)}
+              onBlock={(id) => { setLevel("block"); setSel({ level: "block", id }); }} />
           )}
         </aside>
-      </main>
+      </div>
+    </>
+  );
+}
+
+function Overview({ data }) {
+  const counts = data.summary?.actions_by_crop || {};
+  const onset = data.summary?.onset_status || {};
+  const wk1 = data.skill?.hindcast;
+  return (
+    <div className="animate-fade-in">
+      <h2 className="panel-title">Telangana pilot · {fmtDate(data.issue_date)}</h2>
+      <p className="small secondary" style={{ margin: "0 0 10px" }}>
+        Mahbubnagar · Nalgonda · Medak — {data.blocks.length} blocks, {data.panchayats.length} panchayats. Click a block or panchayat on the map.
+      </p>
+      {data.is_synthetic && (
+        <div className="synthetic-warning">
+          Rainfall for the pilot is generated by a teleconnection-driven simulator and boundaries are approximate.
+          ENSO and IOD indices are real NOAA data; the 2023 MJO is a scenario matched to the replay season.
+        </div>
+      )}
+
+      <div className="section-title">Onset status by block</div>
+      <div className="stat-grid">
+        {[["not_yet", "Not yet"], ["provisional", "Provisional"], ["established", "Established"], ["false_onset", "False onset"]].map(([k, l]) => (
+          <div className="stat" key={k}><div className="v">{onset[k] || 0}</div><div className="l">{l}</div></div>
+        ))}
+      </div>
+
+      <div className="section-title">Today&apos;s advice (panchayats per action)</div>
+      {CROPS.map((c) => {
+        const row = counts[c.key] || {};
+        const total = Object.values(row).reduce((a, b) => a + b, 0) || 1;
+        return (
+          <div key={c.key} style={{ marginBottom: 8 }}>
+            <div className="row between small"><span>{c.icon} {c.en}</span><span className="tiny muted">{Object.entries(row).map(([a, n]) => `${a} ${n}`).join(" · ")}</span></div>
+            <div style={{ display: "flex", height: 10, borderRadius: 5, overflow: "hidden", marginTop: 4 }}>
+              {Object.entries(row).map(([a, n]) => (
+                <div key={a} title={`${a}: ${n}`} style={{ width: `${(100 * n) / total}%`, background: ACTION_COLOR[a] }} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      <p className="tiny muted">{data.summary?.pending_advisories || 0} advisories waiting for officer approval · <Link href="/officer">open console</Link></p>
+
+      <div className="section-title">Why — planetary drivers</div>
+      <DriversCard drivers={data.drivers} />
+
+      {wk1 && (
+        <>
+          <div className="section-title">How good is the forecast? (hindcast, week 1)</div>
+          <div className="card small">
+            {["onset", "dry_spell_7d", "heavy_rain"].map((e) => (
+              <div className="row between" key={e}>
+                <span className="secondary">{e.replaceAll("_", " ")}</span>
+                <span className="mono">BSS {wk1[e]?.["7"]?.bss?.toFixed(2)} · AUC {wk1[e]?.["7"]?.auc?.toFixed(2)}</span>
+              </div>
+            ))}
+            <p className="tiny muted" style={{ margin: "8px 0 0" }}>Leave-years-out hindcast {data.skill.train_years?.join("–")}; BSS &gt; 0 beats block climatology. <Link href="/skill">Full verification →</Link></p>
+          </div>
+        </>
+      )}
+      <p className="tiny muted" style={{ marginTop: 14 }}>Model {data.model_version}</p>
     </div>
   );
 }
 
-function PilotOverview({ blocks }) {
-  const blockCount = blocks?.features?.length || 0;
+function useDetail(fetcher, id) {
+  const [state, setState] = useState({ id: null, data: null, err: null });
+  useEffect(() => {
+    let live = true;
+    fetcher(id)
+      .then(({ data }) => live && setState({ id, data, err: null }))
+      .catch((e) => live && setState({ id, data: null, err: e.message }));
+    return () => { live = false; };
+  }, [fetcher, id]);
+  return state.id === id ? [state.data, state.err] : [null, null];
+}
 
+function BlockPanel({ id, h, eventKey, onBack, onPanchayat }) {
+  const [d, err] = useDetail(getBlock, id);
+  if (err) return <div className="notice error">{err}</div>;
+  if (!d) return <p className="muted">Loading block…</p>;
+  const f = d.horizons.find((x) => x.horizon_days === h) || d.horizons[0];
+  const explainEvent = EVENT_FOR_EXPLAIN[eventKey];
   return (
     <div className="animate-fade-in">
-      <h2
-        style={{
-          fontSize: "1.1rem",
-          fontWeight: 700,
-          margin: "0 0 4px 0",
-        }}
-      >
-        Telangana Pilot Region
-      </h2>
-      <p
-        style={{
-          fontSize: "0.8rem",
-          color: "var(--color-text-secondary)",
-          margin: "0 0 20px 0",
-        }}
-      >
-        Mahbubnagar · Nalgonda · Medak
-      </p>
+      <button className="btn btn-sm" onClick={onBack}>← Overview</button>
+      <h2 className="panel-title" style={{ marginTop: 10 }}>{d.name}</h2>
+      <p className="small secondary" style={{ margin: "0 0 8px" }}>{d.district} district · block / mandal · {Math.round(d.elevation_m || 0)} m</p>
+      <div className="row"><OnsetPill status={f.onset_status} date={f.onset_date} /><ConfidenceTag level={f.confidence_level} /></div>
+      <div style={{ marginTop: 6 }}><RegimeLine current={f.current_regime} predicted={f.predicted_regime} probability={f.regime_probability} /></div>
 
-      {/* Stats */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 12,
-          marginBottom: 20,
-        }}
-      >
-        {[
-          { label: "Districts", value: "3", icon: "🏛️" },
-          { label: "Blocks", value: String(blockCount), icon: "📍" },
-          { label: "Panchayats", value: "125", icon: "🏘️" },
-          { label: "Crops", value: "4", icon: "🌾" },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="card"
-            style={{ padding: "14px", textAlign: "center" }}
-          >
-            <div style={{ fontSize: "1.5rem", marginBottom: 4 }}>
-              {stat.icon}
-            </div>
-            <div
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: 800,
-                color: "var(--color-accent-cyan)",
-              }}
-            >
-              {stat.value}
-            </div>
-            <div
-              style={{
-                fontSize: "0.7rem",
-                color: "var(--color-text-muted)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
-              {stat.label}
-            </div>
+      <div className="section-title">Chances · {HORIZON_LABEL[h]} ({fmtDate(f.valid_start, { day: "numeric", month: "short" })}–{fmtDate(f.valid_end, { day: "numeric", month: "short" })})</div>
+      <ProbBars forecast={f} />
+
+      <div className="card" style={{ marginTop: 10 }}>
+        <p className="small" style={{ margin: "0 0 8px", lineHeight: 1.5 }}>{f.explanation_en}</p>
+        <div className="tiny muted" style={{ marginBottom: 4 }}>Drivers of the {explainEvent.replaceAll("_", " ")} forecast (TreeSHAP):</div>
+        <DriverChips drivers={f.top_drivers?.[explainEvent]} />
+      </div>
+
+      <div className="section-title">Rainfall outlook (cumulative)</div>
+      <RainFan horizons={d.horizons} />
+
+      <div className="section-title">Season so far</div>
+      <SeasonChart series={d.season_timeseries} observations={d.observations} />
+      {d.onset_record && (
+        <p className="tiny muted">First onset rain {d.onset_record.first_onset || "–"}{d.onset_record.is_false_onset ? " (false onset)" : ""}; lasting onset {d.onset_record.true_onset || "not yet"}.</p>
+      )}
+
+      <div className="section-title">Panchayats</div>
+      {d.panchayats.map((p) => (
+        <div key={p.id} className="card" style={{ cursor: "pointer", padding: 10 }} onClick={() => onPanchayat(p.id)}>
+          <div className="row between">
+            <strong className="small">{p.name}</strong>
+            <span className="tiny muted">{p.soil_type?.replaceAll("_", " ")} · {Math.round((p.irrigated_fraction || 0) * 100)}% irrigated</span>
           </div>
-        ))}
-      </div>
-
-      {/* Crops */}
-      <h3
-        style={{
-          fontSize: "0.85rem",
-          fontWeight: 600,
-          color: "var(--color-text-secondary)",
-          margin: "0 0 12px 0",
-          textTransform: "uppercase",
-          letterSpacing: "0.1em",
-        }}
-      >
-        Pilot Crops
-      </h3>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {[
-          { name: "Cotton (పత్తి)", icon: "🌿", stage: "Sowing window open" },
-          { name: "Soybean (సోయాబీన్)", icon: "🫘", stage: "Pre-sowing" },
-          { name: "Groundnut (వేరుశెనగ)", icon: "🥜", stage: "Pre-sowing" },
-          { name: "Paddy (వరి)", icon: "🌾", stage: "Nursery preparation" },
-        ].map((crop) => (
-          <div
-            key={crop.name}
-            className="card"
-            style={{
-              padding: "12px 16px",
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-            }}
-          >
-            <span style={{ fontSize: "1.3rem" }}>{crop.icon}</span>
-            <div>
-              <div style={{ fontSize: "0.85rem", fontWeight: 600 }}>
-                {crop.name}
-              </div>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: "var(--color-text-muted)",
-                }}
-              >
-                {crop.stage}
-              </div>
-            </div>
+          <div className="row" style={{ marginTop: 6 }}>
+            {p.advisories.map((a) => (
+              <span key={a.crop} className="tiny row" style={{ gap: 4 }}>{CROPS.find((c) => c.key === a.crop)?.icon}<ActionBadge action={a.action} /></span>
+            ))}
           </div>
-        ))}
-      </div>
-
-      <div className="synthetic-warning" style={{ marginTop: 20 }}>
-        ⚠️ This prototype uses SYNTHETIC boundaries and placeholder data.
-        Real data pipeline is under development.
-      </div>
-
-      <p
-        style={{
-          fontSize: "0.75rem",
-          color: "var(--color-text-muted)",
-          marginTop: 16,
-          textAlign: "center",
-        }}
-      >
-        Click a block on the map to see details →
-      </p>
+        </div>
+      ))}
+      <p className="tiny muted">Block trust score {d.trust_score ?? "–"} (from hindcast skill).</p>
     </div>
   );
 }
 
-function BlockDetail({ block }) {
+function PanchayatPanel({ id, onBack, onBlock }) {
+  const [d, err] = useDetail(getPanchayat, id);
+  if (err) return <div className="notice error">{err}</div>;
+  if (!d) return <p className="muted">Loading panchayat…</p>;
   return (
     <div className="animate-fade-in">
-      <button
-        onClick={() => window.location.reload()}
-        style={{
-          background: "none",
-          border: "none",
-          color: "var(--color-accent-blue)",
-          cursor: "pointer",
-          fontSize: "0.8rem",
-          padding: 0,
-          marginBottom: 12,
-        }}
-      >
-        ← Back to overview
-      </button>
-
-      <h2 style={{ fontSize: "1.1rem", fontWeight: 700, margin: "0 0 4px 0" }}>
-        {block.name}
-      </h2>
-      <p
-        style={{
-          fontSize: "0.8rem",
-          color: "var(--color-text-secondary)",
-          margin: "0 0 20px 0",
-        }}
-      >
-        {block.district} · Block / Mandal
+      <div className="row"><button className="btn btn-sm" onClick={onBack}>← Overview</button>
+        <button className="btn btn-sm" onClick={() => onBlock(d.block_id)}>Block: {d.block_name}</button></div>
+      <h2 className="panel-title" style={{ marginTop: 10 }}>{d.name}</h2>
+      <p className="small secondary" style={{ margin: "0 0 8px" }}>
+        Gram panchayat · {d.soil_type?.replaceAll("_", " ")} soil · {Math.round((d.irrigated_fraction || 0) * 100)}% irrigated
       </p>
-
-      {/* Placeholder for forecast data */}
-      <div className="card" style={{ padding: 20, textAlign: "center" }}>
-        <p style={{ color: "var(--color-text-muted)", fontSize: "0.85rem" }}>
-          📊 Forecast data will appear here after the pipeline runs.
-        </p>
-        <p
-          style={{
-            color: "var(--color-text-muted)",
-            fontSize: "0.75rem",
-            marginTop: 8,
-          }}
-        >
-          Milestone 2: Data fetchers → Milestone 4: Models
-        </p>
+      <div className="row"><OnsetPill status={d.onset_status} /><ConfidenceTag level={d.confidence_level} /></div>
+      <div className="section-title">Outlook</div>
+      <div className="tbl-wrap">
+        <table className="tbl">
+          <thead><tr><th>Window</th><th className="num">Rain (median)</th><th className="num">Dry spell</th><th className="num">Heavy rain</th><th className="num">Onset</th></tr></thead>
+          <tbody>
+            {d.horizons.map((x) => (
+              <tr key={x.horizon_days}>
+                <td>{HORIZON_LABEL[x.horizon_days]}</td>
+                <td className="num">{Math.round(x.rainfall_median)} mm <span className="tiny muted">({x.rainfall_anomaly_pct > 0 ? "+" : ""}{Math.round(x.rainfall_anomaly_pct)}%)</span></td>
+                <td className="num">{pct(x.prob_dry_spell_7d)}</td>
+                <td className="num">{pct(x.prob_heavy_rain)}</td>
+                <td className="num">{pct(x.prob_onset)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      <div className="section-title">Crop advisories · {fmtDate(d.issue_date)}</div>
+      {d.advisories.map((a) => <AdvisoryCard key={a.id} adv={a} defaultLang="te" showPhone={false} />)}
+      <p className="tiny muted" style={{ marginTop: 10 }}>Farmers see this in the <Link href={`/farmer?p=${d.id}`}>farmer view</Link> and receive it by SMS / WhatsApp after officer approval.</p>
     </div>
   );
 }

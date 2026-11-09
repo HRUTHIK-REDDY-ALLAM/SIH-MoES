@@ -1,34 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Varsha web app (Next.js 16)
 
-## Getting Started
-
-First, run the development server:
+| Route | What it shows |
+|---|---|
+| `/` | Colour-coded risk map (onset, false onset, dry spell, long break, heavy rain, rainfall) for weeks 1–4, at block or panchayat level, with block and panchayat detail panels |
+| `/farmer` | Mobile-first farmer view in Telugu / Hindi / English: today's action for a crop, 4-week outlook, rain report, SMS/WhatsApp sign-up |
+| `/officer` | Extension officer console: review, edit, approve, reject, bulk approve, dispatch, outbox, pipeline runs |
+| `/replay` | Day-by-day replay of the 2023 Kharif season against observed rain |
+| `/skill` | Hindcast verification: BSS / AUC tables, reliability diagrams, block trust scores |
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The app reads the FastAPI backend at `NEXT_PUBLIC_API_URL` (default `http://localhost:8000`). If the backend is
+not reachable it falls back to the static snapshot in `public/data/*.json` (written by
+`python -m backend.services.export`). The officer console, rain reports and sign-ups need the backend.

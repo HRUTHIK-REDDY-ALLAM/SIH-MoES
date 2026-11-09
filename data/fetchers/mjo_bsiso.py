@@ -25,7 +25,9 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-RMM_URL = "http://www.bom.gov.au/climate/mjo/graphics/rmm.74toRealtime.txt"
+RMM_URL = "https://www.bom.gov.au/climate/mjo/graphics/rmm.74toRealtime.txt"
+# BoM rejects requests without a browser-like User-Agent (HTTP 403)
+HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; Varsha-monsoon-research/0.2)"}
 CACHE_DIR = Path("data/cache/mjo")
 
 
@@ -47,7 +49,7 @@ def fetch_rmm(cache_dir: Path = CACHE_DIR) -> Optional[pd.DataFrame]:
 
     logger.info(f"Fetching RMM from {RMM_URL}")
     try:
-        with httpx.Client(timeout=30, follow_redirects=True) as client:
+        with httpx.Client(timeout=60, follow_redirects=True, headers=HEADERS) as client:
             resp = client.get(RMM_URL)
             resp.raise_for_status()
 

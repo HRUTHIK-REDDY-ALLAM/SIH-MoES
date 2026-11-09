@@ -2,13 +2,8 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# System dependencies for GDAL/Fiona/Rasterio
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    libpq-dev \
-    libgdal-dev \
-    libgeos-dev \
-    libproj-dev \
+# libgomp1: OpenMP runtime needed by LightGBM wheels
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .

@@ -1,115 +1,196 @@
 # =============================================================================
-# Varsha — Advisory Rules Engine
-# Based on ICAR-CRIDA District Contingency Plans for Telangana
-# These are DETERMINISTIC rules. LLM may only rephrase, never decide.
+# Varsha — Advisory Rules (expert system)
+# Based on ICAR-CRIDA District Agriculture Contingency Plans for Telangana.
+# These are DETERMINISTIC rules evaluated in priority order. Probabilities come
+# from the hybrid forecast; seedling survival comes from the analog ensemble +
+# FAO-56 water balance. An LLM/MT engine may only rephrase text, never decide.
+#
+# Telugu and Hindi texts were drafted for the prototype and must be reviewed
+# by a native-speaking agronomist (KVK / PJTSAU) before field use.
 # =============================================================================
 
 # --- Cost-loss decision framework ---
-# Action = Sow if P(seedling_survival) > cost_loss_ratio
-# cost_loss_ratio = seed_cost / (expected_revenue - other_costs)
+# Sowing now risks losing seed + sowing cost (L) if seedlings fail; waiting
+# costs some yield (C). Sow only if P(seedling failure) < C/L, i.e.
+#   seedling_survival_probability > 1 - cost_loss_ratio
 decision_framework:
   default_cost_loss_ratio: 0.35
-  # Override per crop if economics differ
   overrides:
-    cotton: 0.30       # High seed cost, high reward
+    cotton: 0.30       # expensive Bt seed -> lower tolerance for failure
     soybean: 0.35
-    groundnut: 0.40    # Very sensitive to false onset
-    paddy: 0.25        # Needs assured water
+    groundnut: 0.30    # costly seed, very sensitive to false onset
+    paddy: 0.40        # nursery is cheap to redo; transplanting comes later
 
-# --- Onset advisories ---
-onset_advisories:
-  # When onset probability exceeds threshold AND false onset probability is low
-  sow_go:
-    conditions:
-      onset_probability_min: 0.70
-      false_onset_probability_max: 0.25
-      seedling_survival_probability_min: 0.65
-    action: "SOW"
-    message_en: "Monsoon onset is likely. Conditions are favourable for sowing {crop}. Proceed with land preparation and sowing."
-    message_te: "రుతుపవనాల ప్రారంభం జరిగే అవకాశం ఉంది. {crop} విత్తడానికి అనుకూలమైన పరిస్థితులు ఉన్నాయి."
-    message_hi: "मानसून की शुरुआत संभावित है। {crop} की बुवाई के लिए अनुकूल परिस्थितियाँ हैं।"
-
-  # When onset signal present but false onset risk is high
-  sow_wait:
-    conditions:
-      onset_probability_min: 0.50
-      false_onset_probability_min: 0.25
-    action: "WAIT"
+# --- Rule thresholds (evaluated in this order) ---
+rules:
+  very_heavy_alert:           # any crop, any stage
+    action: ALERT
+    priority: 1
+    very_heavy_rain_probability_7d_min: 0.30
+  switch_crop:                # not sown and the sowing window has closed or onset is very late
+    action: SWITCH
+    priority: 2
+    days_after_latest_sowing: 0
+    late_onset_doy: 196       # after July 15 with no established onset
+    onset_probability_14d_max: 0.40
+  resow_alert:                # sown, seedlings exposed to a long break
+    action: RESOW_ALERT
+    priority: 2
+    stages: [initial]
+    dry_spell_probability_14d_min: 0.50
+  sow_go:                     # not sown, inside the window, onset signal present, and:
+    action: SOW
+    priority: 3
+    onset_probability_7d_min: 0.70        # ... or onset already provisional/established
+    min_soil_moisture: 0.20               # enough moisture in the root zone to sow
+    min_rain_last_14d_mm: 50              # ICAR-CRIDA: sow only after ~50 mm of cumulative rain
+    false_onset_given_onset_max: 0.95     # veto only when the rains are almost certain to fail;
+                                          # otherwise seedling survival (water balance) decides
+    # plus: P(seedling survival | sow today) > 1 - cost_loss_ratio (decision_framework)
+  sow_wait:                   # onset signal present but survival / soil / false-onset checks fail
+    action: WAIT
+    priority: 3
     wait_days: 7
-    message_en: "Rain has started but a dry spell is likely within the next 2 weeks. Wait {wait_days} more days before sowing {crop} to avoid seedling loss."
-    message_te: "వర్షం ప్రారంభమైంది కానీ రాబోయే 2 వారాలలో పొడి వాతావరణం ఉండే అవకాశం ఉంది. {crop} విత్తడానికి మరో {wait_days} రోజులు ఆగండి."
-    message_hi: "बारिश शुरू हुई है लेकिन अगले 2 हफ्तों में सूखे की संभावना है। {crop} की बुवाई के लिए {wait_days} दिन और प्रतीक्षा करें।"
+  protect:
+    action: PROTECT
+    priority: 3
+    stages: [initial, development]
+    dry_spell_probability_7d_min: 0.60
+  irrigate:
+    action: IRRIGATE
+    priority: 3
+    stages: [development, mid_season]
+    max_soil_moisture: 0.35
+    dry_spell_probability_7d_min: 0.50
+  heavy_prepare:
+    action: PREPARE
+    priority: 4
+    heavy_rain_probability_7d_min: 0.50
+  break_conserve:
+    action: CONSERVE
+    priority: 4
+    dry_spell_probability_14d_min: 0.60
+    anomaly_vs_climatology_min: 0.12      # break risk must be clearly above normal for the date
+  pre_season:
+    action: WAIT
+    priority: 5
+    days_before_earliest_sowing: 3
+  await_onset:
+    action: WAIT
+    priority: 5
+  normal:
+    action: NORMAL
+    priority: 6
 
-  # When onset is very late
-  switch_crop:
-    conditions:
-      current_doy_min: 196       # After July 15
-      onset_probability_max: 0.40
-    action: "SWITCH"
-    message_en: "Monsoon onset is very delayed. Consider switching from {crop} to a short-duration alternative: {alternative_crop}."
-    message_te: "రుతుపవనాల ప్రారంభం చాలా ఆలస్యం అవుతోంది. {crop} నుండి తక్కువ కాలం పంట {alternative_crop}కి మారడాన్ని పరిగణించండి."
-    message_hi: "मानसून की शुरुआत बहुत देर हो रही है। {crop} से कम अवधि की फसल {alternative_crop} में बदलने पर विचार करें।"
-
-# --- Alternative crops when switching ---
+# --- Alternative crops when switching / resowing ---
 crop_alternatives:
   cotton: ["short-duration pigeon pea", "castor"]
   soybean: ["green gram (moong)", "black gram (urad)"]
   groundnut: ["sunflower", "sesame"]
   paddy: ["direct-seeded rice", "finger millet"]
 
-# --- Dry spell advisories ---
-dry_spell_advisories:
-  short_spell:
-    conditions:
-      dry_spell_probability_7d_min: 0.60
-      crop_stage: ["initial", "development"]
-    action: "PROTECT"
-    message_en: "A dry spell of 7+ days is likely. {crop} is in a sensitive stage. Apply mulch, reduce fertiliser, and conserve soil moisture."
-    message_te: "7+ రోజుల పొడి వాతావరణం ఉండే అవకాశం ఉంది. {crop} సున్నితమైన దశలో ఉంది. మల్చింగ్ చేయండి, ఎరువును తగ్గించండి."
-    message_hi: "7+ दिनों का सूखा संभावित है। {crop} संवेदनशील अवस्था में है। मल्चिंग करें और उर्वरक कम करें।"
+crop_alternatives_i18n:
+  te:
+    cotton: ["తక్కువ కాలపు కంది", "ఆముదం"]
+    soybean: ["పెసర", "మినుము"]
+    groundnut: ["పొద్దుతిరుగుడు", "నువ్వులు"]
+    paddy: ["వెదజల్లే వరి", "రాగి"]
+  hi:
+    cotton: ["कम अवधि की अरहर", "अरंडी"]
+    soybean: ["मूंग", "उड़द"]
+    groundnut: ["सूरजमुखी", "तिल"]
+    paddy: ["सीधी बुवाई वाला धान", "रागी"]
 
-  long_spell:
-    conditions:
-      dry_spell_probability_14d_min: 0.50
-      crop_stage: ["initial"]
-    action: "RESOW_ALERT"
-    message_en: "Extended dry spell (14+ days) is likely. If {crop} seedlings fail, be prepared to resow with {alternative_crop} once rains resume."
-    message_te: "సుదీర్ఘ పొడి వాతావరణం (14+ రోజులు) ఉండే అవకాశం ఉంది. {crop} మొలకలు విఫలమైతే, వర్షాలు తిరిగి వచ్చిన తర్వాత {alternative_crop}తో తిరిగి విత్తడానికి సిద్ధంగా ఉండండి."
-    message_hi: "लंबा सूखा (14+ दिन) संभावित है। यदि {crop} के पौधे मर जाएं तो बारिश लौटने पर {alternative_crop} से दोबारा बुवाई के लिए तैयार रहें।"
+# --- Short action words (SMS headline) ---
+action_words:
+  SOW:         {en: "SOW NOW", te: "ఇప్పుడు విత్తండి", hi: "अभी बुवाई करें"}
+  WAIT:        {en: "WAIT, DO NOT SOW YET", te: "ఇంకా విత్తవద్దు", hi: "अभी बुवाई न करें"}
+  SWITCH:      {en: "SWITCH CROP", te: "పంట మార్చండి", hi: "फसल बदलें"}
+  PROTECT:     {en: "PROTECT CROP", te: "పంటను కాపాడండి", hi: "फसल बचाएं"}
+  IRRIGATE:    {en: "GIVE PROTECTIVE IRRIGATION", te: "రక్షణ తడి ఇవ్వండి", hi: "जीवन-रक्षक सिंचाई करें"}
+  CONSERVE:    {en: "CONSERVE MOISTURE", te: "తేమను కాపాడండి", hi: "नमी बचाएं"}
+  PREPARE:     {en: "HEAVY RAIN - PREPARE", te: "భారీ వర్షం - సిద్ధంగా ఉండండి", hi: "भारी बारिश - तैयार रहें"}
+  ALERT:       {en: "VERY HEAVY RAIN ALERT", te: "అతి భారీ వర్ష హెచ్చరిక", hi: "अति भारी वर्षा चेतावनी"}
+  RESOW_ALERT: {en: "RESOWING MAY BE NEEDED", te: "మళ్ళీ విత్తాల్సి రావచ్చు", hi: "दोबारा बुवाई करनी पड़ सकती है"}
+  NORMAL:      {en: "NORMAL - CONTINUE WORK", te: "సాధారణం - పనులు కొనసాగించండి", hi: "सामान्य - काम जारी रखें"}
 
-# --- Heavy rain advisories ---
-heavy_rain_advisories:
-  heavy:
-    conditions:
-      heavy_rain_probability_min: 0.50
-    action: "PREPARE"
-    message_en: "Heavy rain (65+ mm/day) is likely in the next {horizon}. Ensure field drainage. Avoid spraying pesticides. Harvest mature crops if possible."
-    message_te: "తీవ్రమైన వర్షం (65+ mm/రోజు) రాబోయే {horizon}లో ఉండే అవకాశం ఉంది. పొలంలో నీటి పారుదలను నిర్ధారించండి."
-    message_hi: "भारी बारिश (65+ mm/दिन) अगले {horizon} में संभावित है। खेत की जल निकासी सुनिश्चित करें।"
+confidence_words:
+  high:     {en: "high", te: "ఎక్కువ", hi: "उच्च"}
+  moderate: {en: "moderate", te: "మధ్యస్థం", hi: "मध्यम"}
+  low:      {en: "low", te: "తక్కువ", hi: "कम"}
 
-  very_heavy:
-    conditions:
-      very_heavy_rain_probability_min: 0.30
-    action: "ALERT"
-    message_en: "Very heavy rain (115+ mm/day) warning for the next {horizon}. Risk of waterlogging and crop damage. Move harvested produce to safety."
-    message_te: "అత్యంత తీవ్రమైన వర్షం (115+ mm/రోజు) హెచ్చరిక. నీటి నిల్వ మరియు పంట నష్టం ప్రమాదం."
-    message_hi: "बहुत भारी बारिश (115+ mm/दिन) चेतावनी। जलभराव और फसल क्षति का खतरा।"
+month_names:
+  en: [January, February, March, April, May, June, July, August, September, October, November, December]
+  te: [జనవరి, ఫిబ్రవరి, మార్చి, ఏప్రిల్, మే, జూన్, జూలై, ఆగస్టు, సెప్టెంబర్, అక్టోబర్, నవంబర్, డిసెంబర్]
+  hi: [जनवरी, फ़रवरी, मार्च, अप्रैल, मई, जून, जुलाई, अगस्त, सितंबर, अक्टूबर, नवंबर, दिसंबर]
 
-# --- Monsoon break advisories ---
-break_advisories:
-  active_to_break:
-    conditions:
-      regime_transition_probability_min: 0.60
-      predicted_regime: "break"
-    action: "CONSERVE"
-    message_en: "Monsoon break phase likely starting in {days_ahead} days. Expect reduced rainfall for 7-14 days. Conserve soil moisture. Delay top-dressing fertiliser."
-    message_te: "రుతుపవనాల విరామ దశ {days_ahead} రోజుల్లో ప్రారంభమయ్యే అవకాశం ఉంది. నేల తేమను సంరక్షించండి."
-    message_hi: "मानसून विराम चरण {days_ahead} दिनों में शुरू होने की संभावना। मिट्टी की नमी बचाएं।"
+# --- Full advisory texts per rule ---
+messages:
+  sow_go:
+    en: "Monsoon has set in and the coming weeks look favourable. This is a good time to sow {crop}. Chance that seedlings survive if sown now: {survival}%."
+    te: "రుతుపవనాలు ప్రారంభమయ్యాయి, రాబోయే వారాలు అనుకూలంగా ఉన్నాయి. {crop} విత్తడానికి ఇది మంచి సమయం. ఇప్పుడు విత్తితే మొలకలు బతికే అవకాశం: {survival}%."
+    hi: "मानसून आ गया है और आने वाले हफ्ते अनुकूल दिख रहे हैं। {crop} की बुवाई का यह अच्छा समय है। अभी बोने पर पौध बचने की संभावना: {survival}%।"
+  sow_wait:
+    en: "Rain has started but a dry spell of 7+ days is likely within 2 weeks (chance {p_dry_2w}%). Wait about {wait_days} more days before sowing {crop}. If sown now, seedling survival chance is only {survival}%."
+    te: "వర్షాలు మొదలయ్యాయి కానీ 2 వారాల్లో 7+ రోజుల పొడి వాతావరణం వచ్చే అవకాశం ఉంది ({p_dry_2w}%). {crop} విత్తడానికి మరో {wait_days} రోజులు ఆగండి. ఇప్పుడు విత్తితే మొలకలు బతికే అవకాశం {survival}% మాత్రమే."
+    hi: "बारिश शुरू हो गई है, लेकिन 2 हफ्तों में 7+ दिन सूखा पड़ने की संभावना है ({p_dry_2w}%)। {crop} की बुवाई से पहले लगभग {wait_days} दिन और रुकें। अभी बोने पर पौध बचने की संभावना केवल {survival}% है।"
+  await_onset:
+    en: "Monsoon has not set in yet in your area (chance of onset in the next 7 days: {p_onset}%). Do not sow {crop} yet. Sow only after at least 20 mm of rain over 2-3 days."
+    te: "మీ ప్రాంతంలో రుతుపవనాలు ఇంకా ప్రారంభం కాలేదు (రాబోయే 7 రోజుల్లో ప్రారంభం అవకాశం: {p_onset}%). {crop} ఇప్పుడే విత్తవద్దు. 2-3 రోజుల్లో కనీసం 20 మి.మీ. వర్షం పడిన తర్వాతే విత్తండి."
+    hi: "आपके क्षेत्र में अभी मानसून शुरू नहीं हुआ है (अगले 7 दिनों में शुरुआत की संभावना: {p_onset}%)। अभी {crop} की बुवाई न करें। 2-3 दिनों में कम से कम 20 मिमी बारिश के बाद ही बुवाई करें।"
+  pre_season:
+    en: "The sowing window for {crop} opens around {window_start}. Prepare the land and keep quality seed ready. Do not sow on pre-monsoon showers."
+    te: "{crop} విత్తే సమయం సుమారు {window_start} నుండి మొదలవుతుంది. పొలం సిద్ధం చేసుకోండి, మంచి విత్తనాలు దగ్గర ఉంచుకోండి. తొలకరి జల్లులకే విత్తవద్దు."
+    hi: "{crop} की बुवाई का समय लगभग {window_start} से शुरू होगा। खेत तैयार रखें और अच्छे बीज तैयार रखें। मानसून-पूर्व बौछारों पर बुवाई न करें।"
+  switch_crop:
+    en: "The sowing window for {crop} has closed or the monsoon is badly delayed. Switch to a short-duration crop such as {alternative_crop}."
+    te: "{crop} విత్తే సమయం దాటిపోయింది లేదా రుతుపవనాలు చాలా ఆలస్యం అయ్యాయి. {alternative_crop} వంటి తక్కువ కాలపు పంటకు మారండి."
+    hi: "{crop} की बुवाई का समय निकल गया है या मानसून बहुत देर से है। {alternative_crop} जैसी कम अवधि की फसल लगाएं।"
+  resow_alert:
+    en: "A long dry spell (14+ days) is likely (chance {p_dry14}%). Young {crop} seedlings may die. Keep seed of {alternative_crop} ready to resow when rain returns."
+    te: "సుదీర్ఘ పొడి వాతావరణం (14+ రోజులు) వచ్చే అవకాశం ఉంది ({p_dry14}%). చిన్న {crop} మొలకలు ఎండిపోవచ్చు. వర్షం తిరిగి రాగానే మళ్ళీ విత్తడానికి {alternative_crop} విత్తనాలు సిద్ధంగా ఉంచుకోండి."
+    hi: "लंबा सूखा (14+ दिन) पड़ने की संभावना है ({p_dry14}%)। {crop} के छोटे पौधे सूख सकते हैं। बारिश लौटने पर दोबारा बुवाई के लिए {alternative_crop} के बीज तैयार रखें।"
+  protect:
+    en: "A dry spell of 7+ days is likely this week (chance {p_dry}%) while {crop} is at a sensitive stage. Do inter-cultivation or mulching to save soil moisture and postpone fertiliser."
+    te: "ఈ వారం 7+ రోజుల పొడి వాతావరణం వచ్చే అవకాశం ఉంది ({p_dry}%). {crop} సున్నిత దశలో ఉంది. నేల తేమను కాపాడేందుకు అంతర కృషి లేదా మల్చింగ్ చేయండి, ఎరువులు వాయిదా వేయండి."
+    hi: "इस हफ्ते 7+ दिन सूखा पड़ने की संभावना है ({p_dry}%) और {crop} संवेदनशील अवस्था में है। नमी बचाने के लिए निराई-गुड़ाई या मल्चिंग करें और उर्वरक देना टालें।"
+  irrigate:
+    en: "Soil moisture is low and little rain is expected (dry-spell chance {p_dry}%). Give a protective irrigation to {crop} from a farm pond or borewell if available."
+    te: "నేలలో తేమ తక్కువగా ఉంది, వర్షం తక్కువగా పడే అవకాశం ఉంది (పొడి వాతావరణం అవకాశం {p_dry}%). అందుబాటులో ఉంటే ఫారం పాండ్ లేదా బోరు నుండి {crop}కు రక్షణ తడి ఇవ్వండి."
+    hi: "मिट्टी में नमी कम है और बारिश कम होने की संभावना है (सूखे की संभावना {p_dry}%)। उपलब्ध हो तो खेत तालाब या बोरवेल से {crop} में जीवन-रक्षक सिंचाई करें।"
+  break_conserve:
+    en: "A monsoon break is likely to start within {days_ahead} days, with little rain for 1-2 weeks. Conserve soil moisture and delay top-dressing of fertiliser for {crop}."
+    te: "{days_ahead} రోజుల్లో రుతుపవనాల విరామం మొదలయ్యే అవకాశం ఉంది, 1-2 వారాలు వర్షం తక్కువగా ఉంటుంది. నేల తేమను కాపాడండి, {crop}కు పై ఎరువు వేయడం వాయిదా వేయండి."
+    hi: "{days_ahead} दिनों में मानसून में विराम शुरू होने की संभावना है, 1-2 हफ्ते बारिश कम रहेगी। मिट्टी की नमी बचाएं और {crop} में ऊपरी खाद देना टालें।"
+  heavy_prepare:
+    en: "Heavy rain (65+ mm in a day) is likely in the next 7 days (chance {p_heavy}%). Clear field drains, avoid spraying and fertiliser application, and keep harvested produce covered."
+    te: "రాబోయే 7 రోజుల్లో భారీ వర్షం (ఒక రోజులో 65+ మి.మీ.) పడే అవకాశం ఉంది ({p_heavy}%). పొలంలో నీరు బయటకు పోయే కాలువలు శుభ్రం చేయండి, పురుగుమందు పిచికారీ మరియు ఎరువులు వేయడం ఆపండి."
+    hi: "अगले 7 दिनों में भारी बारिश (एक दिन में 65+ मिमी) की संभावना है ({p_heavy}%)। खेत की नालियां साफ करें, छिड़काव और खाद डालना टालें, कटी फसल ढककर रखें।"
+  very_heavy_alert:
+    en: "VERY HEAVY RAIN WARNING: 115+ mm in a day is possible in the next 7 days (chance {p_vheavy}%). Risk of waterlogging and crop damage. Drain fields and move produce and animals to safety."
+    te: "అతి భారీ వర్ష హెచ్చరిక: రాబోయే 7 రోజుల్లో ఒక రోజులో 115+ మి.మీ. వర్షం పడే అవకాశం ఉంది ({p_vheavy}%). పొలాల్లో నీరు నిలిచి పంట నష్టం జరగవచ్చు. నీటిని బయటకు పంపండి, పంట ఉత్పత్తులు మరియు పశువులను సురక్షిత ప్రాంతానికి తరలించండి."
+    hi: "अति भारी वर्षा चेतावनी: अगले 7 दिनों में एक दिन में 115+ मिमी बारिश संभव है ({p_vheavy}%)। जलभराव और फसल नुकसान का खतरा। खेतों से पानी निकालें और उपज व पशुओं को सुरक्षित स्थान पर ले जाएं।"
+  normal:
+    en: "The rainfall outlook is normal for {crop}. Continue planned field operations."
+    te: "{crop}కు వర్షపాత సూచన సాధారణంగా ఉంది. ప్రణాళిక ప్రకారం పొలం పనులు కొనసాగించండి."
+    hi: "{crop} के लिए वर्षा का पूर्वानुमान सामान्य है। योजना के अनुसार खेती के काम जारी रखें।"
 
-# --- Confidence display rules ---
+# --- Forecast summary line appended to every advisory ---
+outlook:
+  en: "Next 7 days: about {rain_7d} mm of rain expected; dry-spell chance {p_dry}%, heavy-rain chance {p_heavy}%. Forecast confidence: {confidence}."
+  te: "రాబోయే 7 రోజులు: సుమారు {rain_7d} మి.మీ. వర్షం; పొడి వాతావరణం అవకాశం {p_dry}%, భారీ వర్షం అవకాశం {p_heavy}%. సూచన నమ్మకం: {confidence}."
+  hi: "अगले 7 दिन: लगभग {rain_7d} मिमी बारिश; सूखे की संभावना {p_dry}%, भारी बारिश की संभावना {p_heavy}%। पूर्वानुमान पर भरोसा: {confidence}।"
+
+# --- SMS (kept short; Telugu/Hindi SMS are Unicode = 70 chars per segment) ---
+sms:
+  en: "Varsha {panchayat}: {crop} - {action_word}. 7d: rain {rain_7d}mm, dry {p_dry}%, heavy {p_heavy}%. Reply 1=rained today, 2=no rain"
+  te: "వర్ష {panchayat}: {crop} - {action_word}. 7 రోజులు: వర్షం {rain_7d}మి.మీ, పొడి {p_dry}%, భారీ {p_heavy}%. ఈరోజు వర్షం పడితే 1, లేకపోతే 2 పంపండి"
+  hi: "वर्षा {panchayat}: {crop} - {action_word}। 7 दिन: बारिश {rain_7d}मिमी, सूखा {p_dry}%, भारी {p_heavy}%। आज बारिश हुई तो 1, नहीं तो 2 भेजें"
+
+# --- Confidence display rules (Brier Skill Score vs climatology) ---
 confidence:
   high:
-    min_bss: 0.20           # Brier Skill Score vs climatology
+    min_bss: 0.20
     display_color: "#2ecc71"
     label_en: "High confidence"
   moderate:
@@ -117,6 +198,6 @@ confidence:
     display_color: "#f39c12"
     label_en: "Moderate confidence"
   low:
-    min_bss: -999            # Everything below moderate
+    min_bss: -999
     display_color: "#e74c3c"
     label_en: "Low confidence — treat as general guidance only"

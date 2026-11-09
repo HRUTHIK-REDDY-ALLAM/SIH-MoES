@@ -70,6 +70,9 @@ replay:
   year: 2023
   start_date: "2023-05-15"
   end_date: "2023-10-15"
+  # Date the dashboard opens on in the demo database (its advisories stay
+  # pending for the officer console). Ignored once newer forecasts exist.
+  demo_issue_date: "2023-06-12"
   notable_events:
     - date: "2023-06-09"
       type: "onset_signal"

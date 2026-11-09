@@ -1,235 +1,158 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { colorFor } from "../lib/format";
 
 /**
- * RiskMap — MapLibre GL component showing pilot region blocks
- * with color-coded risk overlays.
+ * RiskMap — block / panchayat choropleth of forecast probabilities.
  *
- * For M1 this shows the SYNTHETIC block boundaries.
- * In later milestones, fill colors will be driven by forecast probabilities.
+ * props
+ *   districts, blocks, panchayats : GeoJSON FeatureCollections
+ *   level      : "block" | "panchayat"
+ *   values     : { [id]: number|null }   value per feature id for the active level
+ *   palette    : palette key (lib/format PALETTES), max: value mapped to the top colour
+ *   overrides  : { [id]: { color, label } } e.g. blocks where onset is already established
+ *   labelFor   : (props, value) => string  hover text
+ *   selectedId : id of the selected feature (active level)
+ *   onSelect   : (props) => void
  */
-export default function RiskMap({ districts, blocks, activeTab, onBlockSelect }) {
-  const mapContainer = useRef(null);
+const EMPTY = { type: "FeatureCollection", features: [] };
+
+export default function RiskMap({
+  districts, blocks, panchayats, level = "block", values = {}, palette = "red", max = 1,
+  overrides = {}, labelFor, selectedId = null, onSelect,
+}) {
+  const container = useRef(null);
   const mapRef = useRef(null);
-  const [mapLoaded, setMapLoaded] = useState(false);
-
-  // Risk color scales per tab
-  const riskColors = {
-    onset: ["#064e3b", "#059669", "#10b981", "#34d399", "#6ee7b7"],
-    false_onset: ["#78350f", "#d97706", "#f59e0b", "#fbbf24", "#fde68a"],
-    dry_spell: ["#7f1d1d", "#dc2626", "#ef4444", "#f87171", "#fca5a5"],
-    heavy_rain: ["#1e3a5f", "#1d4ed8", "#3b82f6", "#60a5fa", "#93c5fd"],
-  };
-
-  // Initialize map
+  const handlers = useRef({ onSelect, labelFor, level });
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    if (mapRef.current || !mapContainer.current) return;
+    handlers.current = { onSelect, labelFor, level };
+  }, [onSelect, labelFor, level]);
 
+  useEffect(() => {
+    if (mapRef.current || !container.current) return;
+    // Risk layers are part of the initial style, so they render as soon as the style is parsed,
+    // independent of basemap tiles (which may be slow or blocked on venue networks).
+    const geo = { type: "geojson", data: EMPTY };
     const map = new maplibregl.Map({
-      container: mapContainer.current,
+      container: container.current,
       style: {
         version: 8,
         glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
         sources: {
-          "carto-dark": {
+          osm: {
             type: "raster",
-            tiles: [
-              "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
-              "https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
-              "https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
-            ],
+            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
             tileSize: 256,
-            attribution: "&copy; CartoDB &copy; OpenStreetMap contributors",
+            maxzoom: 19,
+            attribution: "&copy; OpenStreetMap contributors",
           },
+          districts: geo, blocks: geo, panchayats: geo, selected: geo,
         },
         layers: [
-          {
-            id: "carto-dark-layer",
-            type: "raster",
-            source: "carto-dark",
-            minzoom: 0,
-            maxzoom: 19,
-          },
+          { id: "bg", type: "background", paint: { "background-color": "#0a0f1e" } },
+          // keyless OSM tiles, desaturated and darkened to sit under the risk colours
+          { id: "osm", type: "raster", source: "osm",
+            paint: { "raster-saturation": -1, "raster-brightness-max": 0.32, "raster-contrast": 0.15, "raster-opacity": 0.9 } },
+          { id: "panch-fill", type: "fill", source: "panchayats",
+            paint: { "fill-color": ["coalesce", ["get", "color"], "rgba(0,0,0,0)"], "fill-opacity": 0.78 }, layout: { visibility: "none" } },
+          { id: "panch-line", type: "line", source: "panchayats", paint: { "line-color": "#0a0f1e", "line-width": 0.6 },
+            layout: { visibility: "none" } },
+          { id: "block-fill", type: "fill", source: "blocks",
+            paint: { "fill-color": ["coalesce", ["get", "color"], "rgba(0,0,0,0)"], "fill-opacity": 0.8 } },
+          { id: "block-line", type: "line", source: "blocks", paint: { "line-color": "#0a0f1e", "line-width": 1.2 } },
+          { id: "district-line", type: "line", source: "districts",
+            paint: { "line-color": "#94a3b8", "line-width": 1.6, "line-dasharray": [3, 2] } },
+          { id: "selected-line", type: "line", source: "selected", paint: { "line-color": "#ffffff", "line-width": 3 } },
+          { id: "block-label", type: "symbol", source: "blocks", minzoom: 7.2,
+            layout: { "text-field": ["get", "name"], "text-size": 11, "text-font": ["Open Sans Regular"] },
+            paint: { "text-color": "#f1f5f9", "text-halo-color": "#0a0f1e", "text-halo-width": 1.4 } },
+          { id: "district-label", type: "symbol", source: "districts", maxzoom: 7.4,
+            layout: { "text-field": ["get", "name"], "text-size": 13, "text-font": ["Open Sans Semibold"], "text-allow-overlap": true },
+            paint: { "text-color": "#cbd5e1", "text-halo-color": "#0a0f1e", "text-halo-width": 2 } },
         ],
       },
-      center: [78.5, 17.0], // Center of Telangana pilot region
-      zoom: 7.5,
-      minZoom: 6,
-      maxZoom: 14,
+      center: [78.5, 17.0],
+      zoom: 6.6,
+      minZoom: 5,
+      maxZoom: 13,
+      attributionControl: { compact: true },
     });
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+    const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 8 });
 
-    map.addControl(new maplibregl.NavigationControl(), "bottom-right");
-    map.addControl(
-      new maplibregl.ScaleControl({ maxWidth: 150, unit: "metric" }),
-      "bottom-left"
-    );
-
-    map.on("load", () => {
-      setMapLoaded(true);
-    });
+    for (const layer of ["block-fill", "panch-fill"]) {
+      const active = () => (layer === "block-fill") === (handlers.current.level === "block");
+      map.on("click", layer, (e) => {
+        const f = e.features?.[0];
+        if (f && active()) handlers.current.onSelect?.(f.properties);
+      });
+      map.on("mousemove", layer, (e) => {
+        const f = e.features?.[0];
+        if (!f || !active()) return;
+        map.getCanvas().style.cursor = "pointer";
+        popup.setLngLat(e.lngLat).setHTML(f.properties.label || f.properties.name).addTo(map);
+      });
+      map.on("mouseleave", layer, () => {
+        map.getCanvas().style.cursor = "";
+        popup.remove();
+      });
+    }
+    const ready = () => setLoaded(true);
+    if (map.isStyleLoaded()) ready();
+    else map.once("styledata", ready);
 
     mapRef.current = map;
-
+    if (process.env.NODE_ENV !== "production") window.__varshaMap = map;
     return () => {
       map.remove();
       mapRef.current = null;
     };
   }, []);
 
-  // Add district boundaries
+  // Data / styling updates
   useEffect(() => {
-    if (!mapLoaded || !mapRef.current || !districts) return;
     const map = mapRef.current;
-
-    if (map.getSource("districts")) return;
-
-    map.addSource("districts", {
-      type: "geojson",
-      data: districts,
+    if (!loaded || !map) return;
+    if (districts) map.getSource("districts").setData(districts);
+    const paint = (fc) => ({
+      ...fc,
+      features: (fc?.features || []).map((f) => {
+        const id = f.properties.id;
+        const v = values[id];
+        const ov = overrides[id];
+        return {
+          ...f,
+          properties: {
+            ...f.properties,
+            value: v ?? null,
+            color: ov?.color || colorFor(v, palette, max),
+            label: labelFor ? labelFor(f.properties, v, ov) : f.properties.name,
+          },
+        };
+      }),
     });
+    const isBlock = level === "block";
+    if (blocks) map.getSource("blocks").setData(isBlock ? paint(blocks) : { ...blocks, features: blocks.features.map((f) => ({ ...f, properties: { ...f.properties, color: "rgba(0,0,0,0)", label: f.properties.name } })) });
+    if (panchayats) map.getSource("panchayats").setData(isBlock ? EMPTY : paint(panchayats));
+    map.setLayoutProperty("panch-fill", "visibility", isBlock ? "none" : "visible");
+    map.setLayoutProperty("panch-line", "visibility", isBlock ? "none" : "visible");
+    map.setPaintProperty("block-fill", "fill-opacity", isBlock ? 0.8 : 0);
+    map.setPaintProperty("block-line", "line-color", isBlock ? "#0a0f1e" : "#e2e8f0");
+    map.setPaintProperty("block-line", "line-width", isBlock ? 1.2 : 1.4);
+  }, [loaded, districts, blocks, panchayats, level, values, palette, max, overrides, labelFor]);
 
-    map.addLayer({
-      id: "district-borders",
-      type: "line",
-      source: "districts",
-      paint: {
-        "line-color": "#475569",
-        "line-width": 2,
-        "line-dasharray": [3, 2],
-      },
-    });
-
-    map.addLayer({
-      id: "district-labels",
-      type: "symbol",
-      source: "districts",
-      layout: {
-        "text-field": ["get", "name"],
-        "text-size": 14,
-        "text-font": ["Open Sans Bold"],
-        "text-anchor": "center",
-        "text-allow-overlap": true,
-      },
-      paint: {
-        "text-color": "#94a3b8",
-        "text-halo-color": "#0a0f1e",
-        "text-halo-width": 2,
-      },
-    });
-  }, [mapLoaded, districts]);
-
-  // Add block boundaries with risk coloring
+  // Selection outline
   useEffect(() => {
-    if (!mapLoaded || !mapRef.current || !blocks) return;
     const map = mapRef.current;
+    if (!loaded || !map) return;
+    const fc = level === "block" ? blocks : panchayats;
+    const feat = fc?.features?.find((f) => f.properties.id === selectedId);
+    map.getSource("selected").setData(feat ? { type: "FeatureCollection", features: [feat] } : EMPTY);
+  }, [loaded, selectedId, level, blocks, panchayats]);
 
-    // Remove existing block layers
-    if (map.getLayer("block-fills")) map.removeLayer("block-fills");
-    if (map.getLayer("block-borders")) map.removeLayer("block-borders");
-    if (map.getLayer("block-labels")) map.removeLayer("block-labels");
-    if (map.getSource("blocks")) map.removeSource("blocks");
-
-    // Assign random risk values for demo (will be replaced with real data)
-    const dataWithRisk = {
-      ...blocks,
-      features: blocks.features.map((f, i) => ({
-        ...f,
-        properties: {
-          ...f.properties,
-          risk_value: Math.random(), // SYNTHETIC — placeholder
-        },
-      })),
-    };
-
-    map.addSource("blocks", {
-      type: "geojson",
-      data: dataWithRisk,
-    });
-
-    const colors = riskColors[activeTab] || riskColors.onset;
-
-    map.addLayer(
-      {
-        id: "block-fills",
-        type: "fill",
-        source: "blocks",
-        paint: {
-          "fill-color": [
-            "interpolate",
-            ["linear"],
-            ["get", "risk_value"],
-            0, colors[0],
-            0.25, colors[1],
-            0.5, colors[2],
-            0.75, colors[3],
-            1, colors[4],
-          ],
-          "fill-opacity": 0.6,
-        },
-      },
-      "district-borders"
-    );
-
-    map.addLayer({
-      id: "block-borders",
-      type: "line",
-      source: "blocks",
-      paint: {
-        "line-color": "#334155",
-        "line-width": 1,
-      },
-    });
-
-    map.addLayer({
-      id: "block-labels",
-      type: "symbol",
-      source: "blocks",
-      layout: {
-        "text-field": ["get", "name"],
-        "text-size": 10,
-        "text-font": ["Open Sans Regular"],
-        "text-anchor": "center",
-      },
-      paint: {
-        "text-color": "#e2e8f0",
-        "text-halo-color": "#0f172a",
-        "text-halo-width": 1,
-      },
-      minzoom: 8,
-    });
-
-    // Click handler
-    map.on("click", "block-fills", (e) => {
-      if (e.features && e.features.length > 0) {
-        const feature = e.features[0];
-        onBlockSelect?.({
-          name: feature.properties.name,
-          district: feature.properties.district,
-          id: feature.properties.id,
-        });
-      }
-    });
-
-    // Hover effect
-    map.on("mouseenter", "block-fills", () => {
-      map.getCanvas().style.cursor = "pointer";
-    });
-    map.on("mouseleave", "block-fills", () => {
-      map.getCanvas().style.cursor = "";
-    });
-  }, [mapLoaded, blocks, activeTab]);
-
-  return (
-    <div
-      ref={mapContainer}
-      style={{
-        width: "100%",
-        height: "100%",
-        background: "var(--color-bg-primary)",
-      }}
-    />
-  );
+  return <div ref={container} style={{ position: "absolute", inset: 0, background: "var(--color-bg-primary)" }} />;
 }
